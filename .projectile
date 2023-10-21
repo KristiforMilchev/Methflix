@@ -1,0 +1,10 @@
+- */.dart_tool 
+- build/
+
+(dap-register-debug-template
+  "Debug"
+  (list :name "Kristifor Debug"
+        :type "flutter"
+        :program "lib/main.dart"
+        :args nil
+        :cwd nil))

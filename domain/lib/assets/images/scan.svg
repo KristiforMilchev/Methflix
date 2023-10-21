@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg 
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="30"
+   height="30"
+   viewBox="0 0 30 30"
+   version="1.1"
+   id="svg822"
+   inkscape:version="0.92.4 (f8dce91, 2019-08-02)"
+   sodipodi:docname="nfc.svg">
+  <defs
+     id="defs816" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="17.766667"
+     inkscape:cx="1.3341117"
+     inkscape:cy="11.701841"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     units="px"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:lockguides="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid816" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata819">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>
+</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-289.0625)">
+    <path
+       style="fill:#000000;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 20,293.85546 v 18.10352 l -9,-9 v 3 c 0,0 8,9 9,9 h 0.210938 C 20.845635,314.61324 21.44166,314.20869 22,313.75781 v -18.59766 c -0.618707,-0.49963 -1.288408,-0.93504 -2,-1.30469 z M 8.7890625,293.95898 C 8.1543654,294.30472 7.5583404,294.70927 7,295.16015 v 18.59766 c 0.6187068,0.49963 1.2884078,0.93504 2,1.30469 v -18.10352 l 9,9 v -3 c 0,0 -8,-9 -9,-9 z"
+       id="path822"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccscccccccccccsc" />
+  </g>
+</svg>
