@@ -22,6 +22,9 @@ class DashboardViewModel extends PageViewModel {
   ScrollController _scrollController = ScrollController();
   get scrollController => _scrollController;
 
+  ScrollController _horizontalController = ScrollController();
+  get horizontalController => _horizontalController;
+
   ready() {
     _node.requestFocus();
     _movieLists.add(Category(id: 1, name: "Recent", movies: [
@@ -119,6 +122,11 @@ class DashboardViewModel extends PageViewModel {
 
       return;
     }
+
+    if (value.logicalKey.keyLabel == "Arrow Right" ||
+        value.logicalKey.keyLabel == "Arrow Left") {
+      onMoveHorizontal(e, value.logicalKey.keyLabel);
+    }
   }
 
   onMoveVertical(Category e, String value) {
@@ -147,5 +155,33 @@ class DashboardViewModel extends PageViewModel {
       duration: Duration(milliseconds: 600), // Animation duration
       curve: Curves.easeInOut, // Animation curve
     );
+  }
+
+  void onMoveHorizontal(Category e, String value) {
+    int selectedIndex = _movieLists.indexOf(e);
+
+    if (value == "Arrow Left" && _horizontalController.offset > 0) {
+      // Move left if there is room to scroll left
+      double itemWidth = ThemeStyles.width! / 2.5; // Width of each item
+      int selectedMovieIndex = e.movies.indexWhere((movie) => movie);
+      double scrollPosition = itemWidth * selectedMovieIndex;
+      _horizontalController.animateTo(
+        scrollPosition,
+        duration: Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    } else if (value == "Arrow Right" &&
+        _horizontalController.offset <
+            _horizontalController.position.maxScrollExtent) {
+      // Move right if there is room to scroll right
+      double itemWidth = ThemeStyles.width! / 2.5; // Width of each item
+      int selectedMovieIndex = e.movies.indexWhere((movie) => movie);
+      double scrollPosition = itemWidth * (selectedMovieIndex + 1);
+      _horizontalController.animateTo(
+        scrollPosition,
+        duration: Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 }

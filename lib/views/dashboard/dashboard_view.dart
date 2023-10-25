@@ -26,6 +26,7 @@ class DashboardView extends StatelessWidget {
                             child: ListView.builder(
                               itemCount: e.movies.length,
                               scrollDirection: Axis.horizontal,
+                              controller: viewModel.horizontalController,
                               itemBuilder: (context, index) => e.movies[index]
                                   ? Placeholder()
                                   : Container(
