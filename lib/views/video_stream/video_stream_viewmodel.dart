@@ -14,18 +14,50 @@ class VideoStreamViewModel extends PageViewModel {
   VideoStreamViewModel(super.context);
 
   ready() async {
-    var uri = Uri(
+    // Initial video URL
+    var initialUri = Uri(
       scheme: "http",
       host: "192.168.0.108",
       path: "dwad",
       port: 5000,
     );
 
-    _controller = VideoPlayerController.networkUrl(uri)
-      ..initialize().then((_) async {
-        await _controller.play();
-        await _controller.setVolume(1);
-        notifyListeners();
-      });
+    _controller = VideoPlayerController.networkUrl(initialUri);
+
+    _controller.addListener(() {
+      // Check if the video has reached the end.
+      if (_controller.value.position >= _controller.value.duration) {
+        // Load and play the next video chunk.
+        loadNextChunk();
+      }
+    });
+
+    // Initialize the video controller and start playing.
+    await _controller.initialize();
+    await _controller.setVolume(1);
+    await _controller.play();
+
+    notifyListeners();
+  }
+
+// Function to load and play the next video chunk.
+  loadNextChunk() async {
+    var nextChunkUri = Uri(
+      scheme: "http",
+      host: "192.168.0.108",
+      path: "next_chunk", // Replace with the correct path for the next chunk
+      port: 5000,
+    );
+
+    await _controller.pause();
+    _controller = VideoPlayerController.networkUrl(nextChunkUri);
+    await _controller.initialize();
+    await _controller.play();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
