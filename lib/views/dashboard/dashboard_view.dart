@@ -27,12 +27,13 @@ class DashboardView extends StatelessWidget {
                               itemCount: e.movies.length,
                               scrollDirection: Axis.horizontal,
                               controller: viewModel.horizontalController,
-                              itemBuilder: (context, index) => e.movies[index]
-                                  ? Placeholder()
-                                  : Container(
-                                      color: Colors.red,
-                                      child: Placeholder(),
-                                    ),
+                              itemBuilder: (context, index) =>
+                                  e.movies[index].id == viewModel.columnIndex
+                                      ? Placeholder()
+                                      : Container(
+                                          color: Colors.red,
+                                          child: Placeholder(),
+                                        ),
                             ),
                           ),
                         )
