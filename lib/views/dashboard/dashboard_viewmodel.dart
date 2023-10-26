@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:domain/models/categorie.dart';
+import 'package:domain/models/movie.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,9 @@ class DashboardViewModel extends PageViewModel {
   (Category? e, int movie) _previousSelection = (null, 0);
   int _rowIndex = 0;
   int get rowIndex => _rowIndex;
+
+  int _columnIndex = 1;
+  int get columnIndex => _columnIndex;
 
   DashboardViewModel(super.context);
 
@@ -28,68 +32,54 @@ class DashboardViewModel extends PageViewModel {
   ready() {
     _node.requestFocus();
     _movieLists.add(Category(id: 1, name: "Recent", movies: [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
+      Movie(id: 1, name: "M1"),
+      Movie(id: 2, name: "M2"),
+      Movie(id: 3, name: "M3"),
+      Movie(id: 4, name: "M4"),
+      Movie(id: 5, name: "M5"),
+      Movie(id: 6, name: "M7"),
+      Movie(id: 7, name: "M7"),
+      Movie(id: 8, name: "M8"),
     ]));
     _movieLists.add(Category(id: 2, name: "Favorite", movies: [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
+      Movie(id: 1, name: "M1"),
+      Movie(id: 2, name: "M2"),
+      Movie(id: 3, name: "M3"),
+      Movie(id: 4, name: "M4"),
+      Movie(id: 5, name: "M5"),
+      Movie(id: 6, name: "M7"),
+      Movie(id: 7, name: "M7"),
+      Movie(id: 8, name: "M8"),
     ]));
     _movieLists.add(Category(id: 2, name: "Newly added", movies: [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
+      Movie(id: 1, name: "M1"),
+      Movie(id: 2, name: "M2"),
+      Movie(id: 3, name: "M3"),
+      Movie(id: 4, name: "M4"),
+      Movie(id: 5, name: "M5"),
+      Movie(id: 6, name: "M7"),
+      Movie(id: 7, name: "M7"),
+      Movie(id: 8, name: "M8"),
     ]));
     _movieLists.add(Category(id: 2, name: "Newly added", movies: [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
+      Movie(id: 1, name: "M1"),
+      Movie(id: 2, name: "M2"),
+      Movie(id: 3, name: "M3"),
+      Movie(id: 4, name: "M4"),
+      Movie(id: 5, name: "M5"),
+      Movie(id: 6, name: "M7"),
+      Movie(id: 7, name: "M7"),
+      Movie(id: 8, name: "M8"),
     ]));
     _movieLists.add(Category(id: 2, name: "Newly added", movies: [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
+      Movie(id: 1, name: "M1"),
+      Movie(id: 2, name: "M2"),
+      Movie(id: 3, name: "M3"),
+      Movie(id: 4, name: "M4"),
+      Movie(id: 5, name: "M5"),
+      Movie(id: 6, name: "M7"),
+      Movie(id: 7, name: "M7"),
+      Movie(id: 8, name: "M8"),
     ]));
     Timer.periodic(Duration(seconds: 500), (timer) {
       _node.requestFocus();
@@ -98,26 +88,27 @@ class DashboardViewModel extends PageViewModel {
     notifyListeners();
   }
 
-  onKeySelected(Category e, int index) {
-    if (_previousSelection.$1 == null) {
-      _movieLists.firstWhere((element) => element == e).movies[index] = true;
-      _previousSelection = (e, index);
-      notifyListeners();
-    }
+  // onKeySelected(Category e, int index) {
+  //   if (_previousSelection.$1 == null) {
+  //     _movieLists.firstWhere((element) => element == e).movies[index] = true;
+  //     _previousSelection = (e, index);
+  //     notifyListeners();
+  //   }
 
-    _movieLists
-        .firstWhere((element) => element == _previousSelection.$1)
-        .movies[_previousSelection.$2] = false;
-    _movieLists.firstWhere((element) => element == e).movies[index] = true;
-    _previousSelection = (e, index);
-    notifyListeners();
-  }
+  //   _movieLists
+  //       .firstWhere((element) => element == _previousSelection.$1)
+  //       .movies[_previousSelection.$2] = false;
+  //   _movieLists.firstWhere((element) => element == e).movies[index] = true;
+  //   _previousSelection = (e, index);
+  //   notifyListeners();
+  // }
 
   onRowChanged(Category e, RawKeyEvent value) {
     if (value is RawKeyDownEvent) return;
 
     if (value.logicalKey.keyLabel == "Arrow Down" ||
         value.logicalKey.keyLabel == "Arrow Up") {
+      _columnIndex = 1;
       onMoveVertical(e, value.logicalKey.keyLabel);
 
       return;
@@ -158,30 +149,37 @@ class DashboardViewModel extends PageViewModel {
   }
 
   void onMoveHorizontal(Category e, String value) {
-    int selectedIndex = _movieLists.indexOf(e);
-
     if (value == "Arrow Left" && _horizontalController.offset > 0) {
       // Move left if there is room to scroll left
       double itemWidth = ThemeStyles.width! / 2.5; // Width of each item
-      int selectedMovieIndex = e.movies.indexWhere((movie) => movie);
-      double scrollPosition = itemWidth * selectedMovieIndex;
+      int selectedMovieIndex =
+          e.movies.indexWhere((element) => element.id == _columnIndex);
+      double scrollPosition =
+          itemWidth * selectedMovieIndex - ThemeStyles.width! / 2.5;
+      var next = _columnIndex - 1;
+      _columnIndex = next > 0 ? next : 0;
       _horizontalController.animateTo(
         scrollPosition,
         duration: Duration(milliseconds: 600),
         curve: Curves.easeInOut,
       );
     } else if (value == "Arrow Right" &&
-        _horizontalController.offset <
-            _horizontalController.position.maxScrollExtent) {
+            _horizontalController.offset <
+                _horizontalController.position.maxScrollExtent ||
+        _columnIndex < e.movies.length) {
       // Move right if there is room to scroll right
       double itemWidth = ThemeStyles.width! / 2.5; // Width of each item
-      int selectedMovieIndex = e.movies.indexWhere((movie) => movie);
+      int selectedMovieIndex =
+          e.movies.indexWhere((movie) => movie.id == _columnIndex);
       double scrollPosition = itemWidth * (selectedMovieIndex + 1);
+      var next = _columnIndex + 1;
+      _columnIndex = next < e.movies.length ? next : e.movies.length;
       _horizontalController.animateTo(
         scrollPosition,
         duration: Duration(milliseconds: 600),
         curve: Curves.easeInOut,
       );
     }
+    notifyListeners();
   }
 }
