@@ -4,7 +4,8 @@ import 'package:stacked/stacked.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoStreamView extends StatelessWidget {
-  const VideoStreamView({super.key});
+  final String url;
+  const VideoStreamView({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
