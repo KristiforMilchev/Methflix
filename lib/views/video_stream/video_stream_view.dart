@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:presentation/views/video_stream/video_stream_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:video_player/video_player.dart';
@@ -16,8 +17,12 @@ class VideoStreamView extends StatelessWidget {
         color: Color.fromARGB(255, 16, 32, 61),
         child: Container(
           child: SafeArea(
-            child: viewModel.controller.value.isInitialized
-                ? VideoPlayer(viewModel.controller)
+            child: viewModel.videoPlayerController != null
+                ? VlcPlayer(
+                    controller: viewModel.videoPlayerController,
+                    aspectRatio: 16 / 9,
+                    placeholder: Center(child: CircularProgressIndicator()),
+                  )
                 : CircularProgressIndicator(),
           ),
         ),

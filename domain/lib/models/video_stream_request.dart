@@ -22,10 +22,10 @@ class VideoStreamRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      'segmentFrom': segmentFrom,
-      'segmentTo': segmentTo,
-      'movieId': movieId,
-      'lastSegment': lastSegment,
+      'SegmentFrom': segmentFrom,
+      'SegmentTo': segmentTo,
+      'MovieId': movieId,
+      'LastSegment': lastSegment,
     };
   }
 }

@@ -7,7 +7,9 @@ import 'package:infrastructure/interfaces/iconfiguration.dart';
 class Configuration extends LocalStorage implements IConfiguration {
   @override
   Future<AppConfig> getConfig() async {
-    var existingOverride = await get("Config") as String;
+    var existingOverride = await get("Config");
+    if (existingOverride == null) return await AppConfig.load();
+
     if (existingOverride.isEmpty) {
       return await AppConfig.load();
     }

@@ -194,6 +194,7 @@ class DashboardViewModel extends PageViewModel {
       "/video-player",
       pageContext,
       TransitionData(next: PageTransition.easeInAndOut),
+      bindingData: "3",
     );
   }
 }

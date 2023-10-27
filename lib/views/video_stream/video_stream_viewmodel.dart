@@ -1,5 +1,6 @@
 import 'package:domain/models/app_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
 import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 import 'package:presentation/page_view_model.dart';
@@ -9,62 +10,45 @@ class VideoStreamViewModel extends PageViewModel {
   late IVideoStreamService _videoStreamService;
   late AppConfig _config;
   Widget _activeScreen = Placeholder();
+
+  VideoStreamViewModel(super.context);
   Widget get activeScreen => _activeScreen;
 
-  String _videoUrl = "http://localhost:5107/dwad";
-  String get videoUrl => _videoUrl;
-
   late VideoPlayerController _controller;
-  VideoPlayerController get controller => _controller;
-  VideoStreamViewModel(super.context);
+  VideoPlayerController? get controller => _controller;
+  late VlcPlayerController _videoPlayerController;
+
+  int _nextChunk = 1;
+
+  get videoPlayerController => _videoPlayerController;
 
   ready(String name) async {
-    _videoStreamService = getIt.get<IVideoStreamService>();
     var configuration = getIt.get<IConfiguration>();
     _config = await configuration.getConfig();
+    _videoStreamService = getIt.get<IVideoStreamService>();
 
-    if (name.isEmpty) {
-      name = router.getPageBindingData() as String;
-    }
-
-    // Initial video URL
-    var initialUri = Uri(
-      scheme: _config.schema,
-      host: _config.ip,
-      path: "/v1/video/download/",
-      port: _config.port,
-    );
-
-    _controller = VideoPlayerController.networkUrl(initialUri);
-    _controller.addListener(() {
-      // Check if the video has reached the end.
-      if (_controller.value.position >= _controller.value.duration) {
-        // Load and play the next video chunk.
-        loadNextChunk();
-      }
-    });
-
-    // Initialize the video controller and start playing.
-    await _controller.initialize();
-    await _controller.setVolume(1);
-    await _controller.play();
-
-    notifyListeners();
+    _initializeController();
   }
 
-// Function to load and play the next video chunk.
-  loadNextChunk() async {
-    var nextChunkUri = Uri(
-      scheme: _config.schema,
-      host: _config.ip,
-      path: "next_chunk", // Replace with the correct path for the next chunk
-      port: _config.port,
+  void _initializeController() async {
+    var url = Uri.parse("${_config.apiEndpoint}/api/v1/Video/stream/3");
+    // _controller = VideoPlayerController.networkUrl(url)
+    //   ..initialize().then((_) async {
+    //     await _controller.play();
+    //     await _controller.setVolume(1);
+    //     notifyListeners();
+    //   });
+
+    _videoPlayerController = VlcPlayerController.network(
+      "${_config.apiEndpoint}/api/v1/Video/stream/3",
+      hwAcc: HwAcc.auto,
+      autoPlay: true,
+      options: VlcPlayerOptions(),
     );
 
-    await _controller.pause();
-    _controller = VideoPlayerController.networkUrl(nextChunkUri);
-    await _controller.initialize();
-    await _controller.play();
+    await _videoPlayerController.play();
+    await _videoPlayerController.setVolume(100);
+    notifyListeners();
   }
 
   @override
