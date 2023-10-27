@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:domain/models/categorie.dart';
+import 'package:domain/models/enums.dart';
 import 'package:domain/models/movie.dart';
+import 'package:domain/models/transition_data.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,6 +120,10 @@ class DashboardViewModel extends PageViewModel {
         value.logicalKey.keyLabel == "Arrow Left") {
       onMoveHorizontal(e, value.logicalKey.keyLabel);
     }
+
+    if (value.logicalKey.keyLabel == "Select") {
+      playMovie();
+    }
   }
 
   onMoveVertical(Category e, String value) {
@@ -181,5 +187,14 @@ class DashboardViewModel extends PageViewModel {
       );
     }
     notifyListeners();
+  }
+
+  void playMovie() {
+    router.changePage(
+      "/video-player",
+      pageContext,
+      TransitionData(next: PageTransition.easeInAndOut),
+      bindingData: "3",
+    );
   }
 }

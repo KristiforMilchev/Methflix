@@ -20,7 +20,8 @@ dependencies:
   logging: ^1.2.0
   collection: ^1.17.2
   flutter_nfc_kit: ^3.3.3
-
+  http: ^1.1.0
+  path_provider: ^2.0.1
 
 dev_dependencies:
   flutter_test:
