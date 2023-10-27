@@ -1,8 +1,13 @@
+import 'package:domain/models/app_config.dart';
 import 'package:flutter/material.dart';
+import 'package:infrastructure/interfaces/iconfiguration.dart';
+import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 import 'package:presentation/page_view_model.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoStreamViewModel extends PageViewModel {
+  late IVideoStreamService _videoStreamService;
+  late AppConfig _config;
   Widget _activeScreen = Placeholder();
   Widget get activeScreen => _activeScreen;
 
@@ -13,17 +18,24 @@ class VideoStreamViewModel extends PageViewModel {
   VideoPlayerController get controller => _controller;
   VideoStreamViewModel(super.context);
 
-  ready() async {
+  ready(String name) async {
+    _videoStreamService = getIt.get<IVideoStreamService>();
+    var configuration = getIt.get<IConfiguration>();
+    _config = await configuration.getConfig();
+
+    if (name.isEmpty) {
+      name = router.getPageBindingData() as String;
+    }
+
     // Initial video URL
     var initialUri = Uri(
-      scheme: "http",
-      host: "192.168.0.108",
-      path: "dwad",
-      port: 5000,
+      scheme: _config.schema,
+      host: _config.ip,
+      path: "/v1/video/download/",
+      port: _config.port,
     );
 
     _controller = VideoPlayerController.networkUrl(initialUri);
-
     _controller.addListener(() {
       // Check if the video has reached the end.
       if (_controller.value.position >= _controller.value.duration) {
@@ -43,10 +55,10 @@ class VideoStreamViewModel extends PageViewModel {
 // Function to load and play the next video chunk.
   loadNextChunk() async {
     var nextChunkUri = Uri(
-      scheme: "http",
-      host: "192.168.0.108",
+      scheme: _config.schema,
+      host: _config.ip,
       path: "next_chunk", // Replace with the correct path for the next chunk
-      port: 5000,
+      port: _config.port,
     );
 
     await _controller.pause();

@@ -62,7 +62,15 @@ class ApplicationRouter {
   }
 
   static final List<(String, dynamic, int, Duration)> _routes = [
-    ("dashboard-view", DashboardView(), 1, Duration(milliseconds: 500))
+    ("dashboard-view", DashboardView(), 1, Duration(milliseconds: 500)),
+    (
+      "video-player",
+      VideoStreamView(
+        name: "",
+      ),
+      1,
+      Duration(milliseconds: 500)
+    )
   ];
 
   static const Duration animationDuration = Duration(milliseconds: 500);

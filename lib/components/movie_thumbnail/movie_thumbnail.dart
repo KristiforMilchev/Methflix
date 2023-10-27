@@ -22,7 +22,7 @@ class MovieThumbnail extends StatelessWidget {
           ],
         ),
         replacement: VideoStreamView(
-          url: movie.name,
+          name: movie.name,
         ),
       ),
     );

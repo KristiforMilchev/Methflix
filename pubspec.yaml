@@ -49,7 +49,7 @@ dependencies:
   gradient_borders: ^1.0.0
   go_router: ^6.4.0
   another_flushbar: ^1.12.30
-
+  http: ^1.1.0
   rive: ^0.11.4
   video_player: ^2.2.15
 
@@ -82,6 +82,9 @@ flutter:
     - packages/domain/assets/images/scan.svg
     - packages/domain/assets/images/add.svg
     - packages/domain/assets/images/list.svg
+
+    #Configs
+    - packages/domain/config.json
 
     #Animations
 
