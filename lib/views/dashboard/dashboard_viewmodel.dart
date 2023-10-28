@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:domain/models/categorie.dart';
 import 'package:domain/models/enums.dart';
-import 'package:domain/models/movie.dart';
 import 'package:domain/models/transition_data.dart';
+import 'package:domain/exceptions/failed_initialization.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +19,7 @@ class DashboardViewModel extends PageViewModel {
   int _rowIndex = 0;
   int get rowIndex => _rowIndex;
 
-  int _columnIndex = 1;
+  int _columnIndex = 0;
   int get columnIndex => _columnIndex;
 
   DashboardViewModel(super.context);
@@ -32,10 +34,19 @@ class DashboardViewModel extends PageViewModel {
   get horizontalController => _horizontalController;
 
   ready() async {
-    _node.requestFocus();
-    _videoStreamService = getIt.get<IVideoStreamService>();
-    _movieLists = await _videoStreamService.getAllCategories();
-    notifyListeners();
+    try {
+      _node.requestFocus();
+      _videoStreamService = getIt.get<IVideoStreamService>();
+      _movieLists = await _videoStreamService.getAllCategories();
+      Timer.periodic(Duration(seconds: 1), (timer) async {
+        _node.requestFocus();
+      });
+
+      notifyListeners();
+    } catch (ex) {
+      var res = ex as Exception;
+      throw FailedInitialization(context: pageContext, message: res.toString());
+    }
   }
 
   onRowChanged(Category e, RawKeyEvent value) {
@@ -88,37 +99,27 @@ class DashboardViewModel extends PageViewModel {
   }
 
   void onMoveHorizontal(Category e, String value) {
-    if (value == "Arrow Left" && _horizontalController.offset > 0) {
-      // Move left if there is room to scroll left
-      double itemWidth = ThemeStyles.width! / 2.5; // Width of each item
-      int selectedMovieIndex =
-          e.movies.indexWhere((element) => element.id == _columnIndex);
-      double scrollPosition =
-          itemWidth * selectedMovieIndex - ThemeStyles.width! / 2.5;
-      var next = _columnIndex - 1;
-      _columnIndex = next > 0 ? next : 0;
-      _horizontalController.animateTo(
-        scrollPosition,
-        duration: Duration(milliseconds: 600),
-        curve: Curves.easeInOut,
-      );
-    } else if (value == "Arrow Right" &&
-            _horizontalController.offset <
-                _horizontalController.position.maxScrollExtent ||
-        _columnIndex < e.movies.length) {
-      // Move right if there is room to scroll right
-      double itemWidth = ThemeStyles.width! / 2.5; // Width of each item
-      int selectedMovieIndex =
-          e.movies.indexWhere((movie) => movie.id == _columnIndex);
-      double scrollPosition = itemWidth * (selectedMovieIndex + 1);
-      var next = _columnIndex + 1;
-      _columnIndex = next < e.movies.length ? next : e.movies.length;
-      _horizontalController.animateTo(
-        scrollPosition,
-        duration: Duration(milliseconds: 600),
-        curve: Curves.easeInOut,
-      );
+    if (value == "Arrow Left") {
+      if (_columnIndex > 0) {
+        _columnIndex--;
+      }
+    } else if (value == "Arrow Right") {
+      if (_columnIndex < e.movies.length - 1) {
+        _columnIndex++;
+      }
     }
+
+    double itemWidth = ThemeStyles.width! / 3; // Width of each item
+    double scrollPosition = itemWidth * _columnIndex;
+
+    _horizontalController.animateTo(
+      scrollPosition,
+      duration: Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
+    );
+
+    observer.getObserver("on_movie_selected", e.movies[_columnIndex]);
+
     notifyListeners();
   }
 
@@ -127,7 +128,7 @@ class DashboardViewModel extends PageViewModel {
       "/video-player",
       pageContext,
       TransitionData(next: PageTransition.easeInAndOut),
-      bindingData: "3",
+      bindingData: _movieLists[_rowIndex].movies[_columnIndex].id,
     );
   }
 }
