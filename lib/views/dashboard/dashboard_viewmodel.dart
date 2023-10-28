@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:domain/models/categorie.dart';
 import 'package:domain/models/enums.dart';
 import 'package:domain/models/movie.dart';
@@ -7,9 +5,11 @@ import 'package:domain/models/transition_data.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 import 'package:presentation/page_view_model.dart';
 
 class DashboardViewModel extends PageViewModel {
+  late IVideoStreamService _videoStreamService;
   List<Category> _movieLists = [];
   List<Category> get movieLists => _movieLists;
 
@@ -31,79 +31,12 @@ class DashboardViewModel extends PageViewModel {
   ScrollController _horizontalController = ScrollController();
   get horizontalController => _horizontalController;
 
-  ready() {
+  ready() async {
     _node.requestFocus();
-    _movieLists.add(Category(id: 1, name: "Recent", movies: [
-      Movie(id: 1, name: "M1"),
-      Movie(id: 2, name: "M2"),
-      Movie(id: 3, name: "M3"),
-      Movie(id: 4, name: "M4"),
-      Movie(id: 5, name: "M5"),
-      Movie(id: 6, name: "M7"),
-      Movie(id: 7, name: "M7"),
-      Movie(id: 8, name: "M8"),
-    ]));
-    _movieLists.add(Category(id: 2, name: "Favorite", movies: [
-      Movie(id: 1, name: "M1"),
-      Movie(id: 2, name: "M2"),
-      Movie(id: 3, name: "M3"),
-      Movie(id: 4, name: "M4"),
-      Movie(id: 5, name: "M5"),
-      Movie(id: 6, name: "M7"),
-      Movie(id: 7, name: "M7"),
-      Movie(id: 8, name: "M8"),
-    ]));
-    _movieLists.add(Category(id: 2, name: "Newly added", movies: [
-      Movie(id: 1, name: "M1"),
-      Movie(id: 2, name: "M2"),
-      Movie(id: 3, name: "M3"),
-      Movie(id: 4, name: "M4"),
-      Movie(id: 5, name: "M5"),
-      Movie(id: 6, name: "M7"),
-      Movie(id: 7, name: "M7"),
-      Movie(id: 8, name: "M8"),
-    ]));
-    _movieLists.add(Category(id: 2, name: "Newly added", movies: [
-      Movie(id: 1, name: "M1"),
-      Movie(id: 2, name: "M2"),
-      Movie(id: 3, name: "M3"),
-      Movie(id: 4, name: "M4"),
-      Movie(id: 5, name: "M5"),
-      Movie(id: 6, name: "M7"),
-      Movie(id: 7, name: "M7"),
-      Movie(id: 8, name: "M8"),
-    ]));
-    _movieLists.add(Category(id: 2, name: "Newly added", movies: [
-      Movie(id: 1, name: "M1"),
-      Movie(id: 2, name: "M2"),
-      Movie(id: 3, name: "M3"),
-      Movie(id: 4, name: "M4"),
-      Movie(id: 5, name: "M5"),
-      Movie(id: 6, name: "M7"),
-      Movie(id: 7, name: "M7"),
-      Movie(id: 8, name: "M8"),
-    ]));
-    Timer.periodic(Duration(seconds: 500), (timer) {
-      _node.requestFocus();
-      notifyListeners();
-    });
+    _videoStreamService = getIt.get<IVideoStreamService>();
+    _movieLists = await _videoStreamService.getAllCategories();
     notifyListeners();
   }
-
-  // onKeySelected(Category e, int index) {
-  //   if (_previousSelection.$1 == null) {
-  //     _movieLists.firstWhere((element) => element == e).movies[index] = true;
-  //     _previousSelection = (e, index);
-  //     notifyListeners();
-  //   }
-
-  //   _movieLists
-  //       .firstWhere((element) => element == _previousSelection.$1)
-  //       .movies[_previousSelection.$2] = false;
-  //   _movieLists.firstWhere((element) => element == e).movies[index] = true;
-  //   _previousSelection = (e, index);
-  //   notifyListeners();
-  // }
 
   onRowChanged(Category e, RawKeyEvent value) {
     if (value is RawKeyDownEvent) return;

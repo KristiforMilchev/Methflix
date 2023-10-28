@@ -18,8 +18,6 @@ class VideoStreamViewModel extends PageViewModel {
   VideoPlayerController? get controller => _controller;
   late VlcPlayerController _videoPlayerController;
 
-  int _nextChunk = 1;
-
   get videoPlayerController => _videoPlayerController;
 
   ready(String name) async {
@@ -32,12 +30,6 @@ class VideoStreamViewModel extends PageViewModel {
 
   void _initializeController() async {
     var url = Uri.parse("${_config.apiEndpoint}/api/v1/Video/stream/3");
-    // _controller = VideoPlayerController.networkUrl(url)
-    //   ..initialize().then((_) async {
-    //     await _controller.play();
-    //     await _controller.setVolume(1);
-    //     notifyListeners();
-    //   });
 
     _videoPlayerController = VlcPlayerController.network(
       "${_config.apiEndpoint}/api/v1/Video/stream/3",
