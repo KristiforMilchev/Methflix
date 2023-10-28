@@ -62,7 +62,7 @@ class ApplicationRouter {
   }
 
   static final List<(String, dynamic, int, Duration)> _routes = [
-    ("dashboard-view", DashboardView(), 1, Duration(milliseconds: 500)),
+    ("dashboard", DashboardView(), 1, Duration(milliseconds: 500)),
     (
       "video-player",
       VideoStreamView(
@@ -92,11 +92,6 @@ class ApplicationRouter {
                   transitionDuration: e.$4,
                   child: WillPopScope(
                     onWillPop: () async {
-                      GetIt getIt = GetIt.I;
-
-                      IPageRouterService _routerService =
-                          getIt.get<IPageRouterService>();
-                      _routerService.backToPrevious(context);
                       return false;
                     },
                     child: e.$2,

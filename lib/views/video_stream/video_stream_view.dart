@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:presentation/views/video_stream/video_stream_viewmodel.dart';
+import 'package:show_fps/show_fps.dart';
 import 'package:stacked/stacked.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoStreamView extends StatelessWidget {
   final String name;
@@ -18,10 +18,29 @@ class VideoStreamView extends StatelessWidget {
         child: Container(
           child: SafeArea(
             child: viewModel.videoPlayerController != null
-                ? VlcPlayer(
-                    controller: viewModel.videoPlayerController,
-                    aspectRatio: 16 / 9,
-                    placeholder: Center(child: CircularProgressIndicator()),
+                ? Stack(
+                    children: [
+                      RawKeyboardListener(
+                          focusNode: viewModel.node,
+                          child: Container(),
+                          onKey: viewModel.onKeypressed),
+                      VlcPlayer(
+                        controller: viewModel.videoPlayerController,
+                        aspectRatio: 16 / 9,
+                        virtualDisplay: true,
+                        placeholder: Center(child: CircularProgressIndicator()),
+                      ),
+                      Positioned(
+                        top: 0,
+                        child: ShowFPS(
+                          alignment: Alignment.topRight,
+                          visible: true,
+                          showChart: false,
+                          borderRadius: BorderRadius.all(Radius.circular(11)),
+                          child: Container(),
+                        ),
+                      )
+                    ],
                   )
                 : CircularProgressIndicator(),
           ),

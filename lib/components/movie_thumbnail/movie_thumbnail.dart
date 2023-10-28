@@ -1,4 +1,5 @@
 import 'package:domain/models/movie.dart';
+import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:presentation/components/movie_thumbnail/movie_thumbnail_viewmodel.dart';
 import 'package:presentation/views/video_stream/video_stream_view.dart';
@@ -7,7 +8,9 @@ import 'package:stacked/stacked.dart';
 class MovieThumbnail extends StatelessWidget {
   final Movie movie;
   final bool selected;
-  const MovieThumbnail({super.key, required this.movie, this.selected = false});
+  final double? size;
+  const MovieThumbnail(
+      {super.key, required this.movie, this.selected = false, this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +18,52 @@ class MovieThumbnail extends StatelessWidget {
       viewModelBuilder: () => MovieThumbnailViewModel(context),
       onViewModelReady: (viewModel) => viewModel.ready(movie, selected),
       builder: (context, viewModel, child) => Visibility(
-        visible: !viewModel.isSelected,
-        child: Stack(
-          children: [
-            Image.memory(viewModel.movieThumnail),
-          ],
-        ),
-        replacement: VideoStreamView(
-          name: movie.name,
-        ),
-      ),
+          visible: selected && viewModel.shouldPlay,
+          replacement: Container(
+            decoration: viewModel.isSelected
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: ThemeStyles.secondaryColor,
+                      style: BorderStyle.solid,
+                      width: 5,
+                    ),
+                  )
+                : null,
+            margin: !viewModel.isSelected ? EdgeInsets.all(5) : null,
+            width: size,
+            child: ClipRRect(
+              borderRadius:
+                  BorderRadius.circular(12), // Match the border radius
+              clipBehavior: Clip.hardEdge,
+              child: Stack(
+                children: [
+                  Image.memory(
+                    viewModel.thumbnail,
+                    fit: BoxFit.fill,
+                    width: ThemeStyles.height,
+                    height: ThemeStyles.height,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      color: ThemeStyles.darkBtnSolid,
+                      child: Text(
+                        movie.name,
+                        style: TextStyle(
+                          color: ThemeStyles.secondAccent,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          child: Placeholder()),
     );
   }
 }

@@ -10,19 +10,44 @@ class MovieThumbnailViewModel extends PageViewModel {
   bool _isSelected = false;
   bool get isSelected => _isSelected;
 
-  Uint8List _movieThumbnail = Uint8List(2);
-  Uint8List get movieThumnail => _movieThumbnail;
   MovieThumbnailViewModel(super.context);
+
+  bool _shouldPlay = false;
+  bool get shouldPlay => _shouldPlay;
+
+  Uint8List _thumbnail = Uint8List(2);
+  Uint8List get thumbnail => _thumbnail;
+
   ready(Movie movie, bool initialSelected) {
     _isSelected = initialSelected;
-
+    _thumbnail = loadImage(movie);
     observer.subscribe("on_movie_selected", movieSelected);
     _movie = movie;
-    _movieThumbnail = Uint8List.fromList(base64.decode(movie.thumbnail));
   }
 
-  movieSelected() {
-    _isSelected = true;
-    notifyListeners();
+  movieSelected(Movie current) {
+    var newState = _isSelected;
+    if (current.id == _movie.id) {
+      newState = true;
+
+      // Future.delayed(
+      //   Duration(seconds: 3),
+      //   () {
+      //     _shouldPlay = _isSelected;
+      //     notifyListeners();
+      //   },
+      // );
+    } else {
+      newState = false;
+    }
+
+    if (_isSelected != newState) {
+      _isSelected = newState;
+      notifyListeners();
+    }
+  }
+
+  Uint8List loadImage(Movie movie) {
+    return base64.decode(movie.thumbnail);
   }
 }

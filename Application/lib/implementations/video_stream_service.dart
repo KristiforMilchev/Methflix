@@ -17,29 +17,24 @@ class VideoStreamService implements IVideoStreamService {
   Future<List<Category>> getAllCategories() async {
     var apiUrl = '$apiEndpoint/API/V1/Movies/Categories';
 
-    try {
-      // Convert the request object to JSON.
+    // Convert the request object to JSON.
 
-      var result = await _providerService.getRequest(
-        HttpRequest(apiUrl, {
-          'Content-Type': 'application/json',
-        }, {}),
-      );
+    var result = await _providerService.getRequest(
+      HttpRequest(apiUrl, {
+        'Content-Type': 'application/json',
+      }, {}),
+    );
 
-      if (result == null) return [];
+    if (result == null) throw Exception("Can't get API data");
 
-      List<Category> categories = [];
-      var data = jsonDecode(result);
-      for (var categoryMap in data) {
-        var current = Category.fromJson(categoryMap);
-        categories.add(current);
-      }
-
-      return categories;
-    } catch (e) {
-      print('Error while fetching the categories: $e');
-      return [];
+    List<Category> categories = [];
+    var data = jsonDecode(result);
+    for (var categoryMap in data) {
+      var current = Category.fromJson(categoryMap);
+      categories.add(current);
     }
+
+    return categories;
   }
 
   @override
