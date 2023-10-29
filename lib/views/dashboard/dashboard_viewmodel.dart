@@ -84,7 +84,7 @@ class DashboardViewModel extends PageViewModel {
 
     if (value.logicalKey.keyLabel == "Arrow Right" ||
         value.logicalKey.keyLabel == "Arrow Left") {
-      print(_columnIndex);
+      //print(_columnIndex);
 
       onMoveHorizontal(value.logicalKey.keyLabel);
     }
