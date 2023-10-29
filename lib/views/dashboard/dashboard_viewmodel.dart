@@ -4,6 +4,7 @@ import 'package:domain/models/categorie.dart';
 import 'package:domain/models/enums.dart';
 import 'package:domain/models/transition_data.dart';
 import 'package:domain/exceptions/failed_initialization.dart';
+import 'package:domain/models/tv_show.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,6 +33,15 @@ class DashboardViewModel extends PageViewModel {
   ScrollController _horizontalController = ScrollController();
   get horizontalController => _horizontalController;
 
+  bool _contentType = false;
+  bool get contentType => _contentType;
+
+  bool _seasonContentVisible = false;
+  bool get seasonContentVisible => _seasonContentVisible;
+
+  TvShow _tvShow = TvShow(id: 0, name: "", thumbnail: "");
+  TvShow get tvShow => _tvShow;
+
   ready() async {
     try {
       _node.requestFocus();
@@ -48,37 +58,67 @@ class DashboardViewModel extends PageViewModel {
     }
   }
 
-  onRowChanged(Category e, RawKeyEvent value) {
+  onRowChanged(RawKeyEvent value) {
     if (value is RawKeyDownEvent) return;
 
     if (value.logicalKey.keyLabel == "Arrow Down" ||
         value.logicalKey.keyLabel == "Arrow Up") {
-      _columnIndex = 1;
-      onMoveVertical(e, value.logicalKey.keyLabel);
+      _columnIndex = 0;
+      onMoveVertical(value.logicalKey.keyLabel);
+      if (_rowIndex != -1) onMoveHorizontal("Arrow Left");
 
+      return;
+    }
+
+    if (_rowIndex == -1 && value.logicalKey.keyLabel == "Arrow Right") {
+      _columnIndex++;
+      notifyListeners();
+      return;
+    }
+
+    if (_rowIndex == -1 && value.logicalKey.keyLabel == "Arrow Left") {
+      _columnIndex--;
+      notifyListeners();
       return;
     }
 
     if (value.logicalKey.keyLabel == "Arrow Right" ||
         value.logicalKey.keyLabel == "Arrow Left") {
-      onMoveHorizontal(e, value.logicalKey.keyLabel);
+      print(_columnIndex);
+
+      onMoveHorizontal(value.logicalKey.keyLabel);
     }
 
-    if (value.logicalKey.keyLabel == "Select") {
-      playMovie();
+    if (value.logicalKey.keyLabel == "Select" && _rowIndex != -1) {
+      if (_contentType)
+        playMovie();
+      else
+        openSeasonContent();
+    }
+
+    if (value.logicalKey.keyLabel == "Select" && _rowIndex == -1) {
+      switch (_columnIndex) {
+        case 0:
+          _contentType = true;
+          break;
+
+        case 1:
+          _contentType = false;
+          break;
+      }
+      notifyListeners();
     }
   }
 
-  onMoveVertical(Category e, String value) {
-    if (value == "Arrow Up" && _rowIndex - 1 >= 0)
+  onMoveVertical(String value) {
+    if (value == "Arrow Up" && _rowIndex - 1 >= -1) {
       _rowIndex--;
-    else if (_rowIndex + 1 < _movieLists.length && value == "Arrow Down")
+    } else if (_rowIndex + 1 < _movieLists.length && value == "Arrow Down")
       _rowIndex++;
-    notifyListeners();
 
     _node = FocusNode();
     _node.requestFocus();
-    int selectedIndex = _movieLists.indexOf(e);
+    int selectedIndex = _rowIndex;
     double itemHeight = ThemeStyles.height! / 3; // Height of each item
 
 // Calculate the vertical scroll position to keep the selected row visible
@@ -95,15 +135,16 @@ class DashboardViewModel extends PageViewModel {
       duration: Duration(milliseconds: 600), // Animation duration
       curve: Curves.easeInOut, // Animation curve
     );
+    notifyListeners();
   }
 
-  void onMoveHorizontal(Category e, String value) {
+  void onMoveHorizontal(String value) {
     if (value == "Arrow Left") {
       if (_columnIndex > 0) {
         _columnIndex--;
       }
     } else if (value == "Arrow Right") {
-      if (_columnIndex < e.movies.length - 1) {
+      if (_columnIndex < _movieLists[_rowIndex].movies.length - 1) {
         _columnIndex++;
       }
     }
@@ -117,7 +158,8 @@ class DashboardViewModel extends PageViewModel {
       curve: Curves.easeInOut,
     );
 
-    observer.getObserver("on_movie_selected", e.movies[_columnIndex]);
+    observer.getObserver(
+        "on_movie_selected", _movieLists[_rowIndex].movies[_columnIndex]);
 
     notifyListeners();
   }
@@ -129,5 +171,11 @@ class DashboardViewModel extends PageViewModel {
       TransitionData(next: PageTransition.easeInAndOut),
       bindingData: _movieLists[_rowIndex].movies[_columnIndex].id,
     );
+  }
+
+  void openSeasonContent() {
+    _seasonContentVisible = true;
+    _tvShow = _movieLists[_rowIndex].shows[_columnIndex];
+    notifyListeners();
   }
 }

@@ -19,7 +19,7 @@ class MovieThumbnail extends StatelessWidget {
       builder: (context, viewModel, child) => Visibility(
           visible: selected && viewModel.shouldPlay,
           replacement: Container(
-            decoration: viewModel.isSelected
+            decoration: selected
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
@@ -29,7 +29,7 @@ class MovieThumbnail extends StatelessWidget {
                     ),
                   )
                 : null,
-            margin: !viewModel.isSelected ? EdgeInsets.all(5) : null,
+            margin: selected ? EdgeInsets.all(5) : null,
             width: size,
             child: ClipRRect(
               borderRadius:
