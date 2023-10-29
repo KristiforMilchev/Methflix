@@ -1,6 +1,9 @@
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:presentation/components/movie_thumbnail/movie_thumbnail.dart';
+import 'package:presentation/components/custom_button/custom_button.dart';
+import 'package:presentation/components/movie_carousel/movie_carosuel.dart';
+import 'package:presentation/components/tv_show_caraousel/tv_show_caraousel.dart';
+import 'package:presentation/components/tv_show_grid/tv_show_grid.dart';
 import 'package:presentation/views/dashboard/dashboard_viewmodel.dart';
 import 'package:show_fps/show_fps.dart';
 import 'package:stacked/stacked.dart';
@@ -19,68 +22,81 @@ class DashboardView extends StatelessWidget {
           controller: viewModel.scrollController,
           child: Stack(
             children: [
-              Column(
-                children: viewModel.movieLists
-                    .map(
-                      (e) => Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                e.name,
-                                style: TextStyle(
-                                  color: ThemeStyles.acentColor,
-                                  fontSize: 30,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
+              RawKeyboardListener(
+                focusNode: viewModel.focusNode,
+                onKey: (value) => viewModel.onRowChanged(value),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(
+                          widget: Text(
+                            "Movies",
+                            style: ThemeStyles.regularParagraphOv(
+                              color: viewModel.columnIndex == 0 &&
+                                      viewModel.rowIndex == -1
+                                  ? Colors.red
+                                  : ThemeStyles.acentColor,
                             ),
-                            Container(
-                              height: MediaQuery.of(context).size.height / 2.5,
-                              child: viewModel.rowIndex ==
-                                      viewModel.movieLists.indexOf(e)
-                                  ? Container(
-                                      child: RawKeyboardListener(
-                                        focusNode: viewModel.focusNode,
-                                        onKey: (value) =>
-                                            viewModel.onRowChanged(e, value),
-                                        child: ListView.builder(
-                                          itemCount: e.movies.length,
-                                          scrollDirection: Axis.horizontal,
-                                          controller:
-                                              viewModel.horizontalController,
-                                          itemBuilder: (context, index) =>
-                                              MovieThumbnail(
-                                            selected:
-                                                index == viewModel.columnIndex,
-                                            movie: e.movies[index],
-                                            size: e.movies.length < 3
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2
-                                                : MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2.2,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : ListView.builder(
-                                      itemCount: e.movies.length,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) =>
-                                          Placeholder(),
-                                    ),
-                            ),
-                          ],
+                          ),
+                          callback: () {},
                         ),
-                      ),
-                    )
-                    .toList(),
+                        const SizedBox(width: 16),
+                        CustomButton(
+                          widget: Text(
+                            "Tv Shows",
+                            style: ThemeStyles.regularParagraphOv(
+                              color: viewModel.columnIndex == 1 &&
+                                      viewModel.rowIndex == -1
+                                  ? Colors.red
+                                  : ThemeStyles.acentColor,
+                            ),
+                          ),
+                          callback: () {},
+                        )
+                      ],
+                    ),
+                    if (!viewModel.seasonContentVisible)
+                      ...viewModel.movieLists
+                          .where(
+                            (element) => viewModel.contentType
+                                ? element.movies.isNotEmpty
+                                : element.shows.isNotEmpty,
+                          )
+                          .map(
+                            (e) => viewModel.contentType
+                                ? MovieCarosuel(
+                                    rowindex: viewModel.rowIndex,
+                                    globalRowIndex:
+                                        viewModel.movieLists.indexOf(e),
+                                    category: e,
+                                    globalColumnIndex: viewModel.columnIndex,
+                                    horizontal: viewModel.horizontalController,
+                                    vertical: viewModel.scrollController,
+                                  )
+                                : TvShowCaraousel(
+                                    rowindex: viewModel.rowIndex,
+                                    globalRowIndex:
+                                        viewModel.movieLists.indexOf(e),
+                                    category: e,
+                                    globalColumnIndex: viewModel.columnIndex,
+                                    horizontal: viewModel.horizontalController,
+                                    vertical: viewModel.scrollController,
+                                  ),
+                          )
+                          .toList(),
+                    if (viewModel.seasonContentVisible)
+                      TvShowGrid(
+                        rowindex: viewModel.rowIndex,
+                        globalRowIndex: viewModel.rowIndex,
+                        tvShow: viewModel.tvShow,
+                        globalColumnIndex: viewModel.columnIndex,
+                        horizontal: viewModel.horizontalController,
+                        vertical: viewModel.scrollController,
+                      )
+                  ],
+                ),
               ),
               ShowFPS(
                 alignment: Alignment.topRight,

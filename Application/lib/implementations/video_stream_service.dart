@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:domain/models/categorie.dart';
 import 'package:domain/models/movie.dart';
 import 'package:domain/models/http_request.dart';
+import 'package:domain/models/tv_show_season.dart';
 import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 
@@ -55,6 +56,32 @@ class VideoStreamService implements IVideoStreamService {
       var data = jsonDecode(result);
 
       var current = Movie.fromJson(data);
+
+      return current;
+    } catch (e) {
+      print('Error while fetching the categories: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<TvShowSeason?> getSeasonData(int seasonId) async {
+    var apiUrl = '$apiEndpoint/API/V1/Movies/Tv-Show-Episodes/$seasonId';
+
+    try {
+      // Convert the request object to JSON.
+
+      var result = await _providerService.getRequest(
+        HttpRequest(apiUrl, {
+          'Content-Type': 'application/json',
+        }, {}),
+      );
+
+      if (result == null) return null;
+
+      var data = jsonDecode(result);
+
+      var current = TvShowSeason.fromJson(data);
 
       return current;
     } catch (e) {
