@@ -1,18 +1,15 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.findpaw.nfc">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <application
-        android:label="Findpal"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <application
+        android:label="methflix"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
-            android.screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -30,6 +27,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"  />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -37,25 +35,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
     </application>
-
-    <queries>
-
-        <package android:name="com.findpaw.nfc" />
-        <intent>
-            <category android:name="android.intent.category.HOME"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="https" />
-        </intent>
-
-        <intent>
-            <action android:name="android.intent.action.MAIN"/>
-            <category android:name="android.intent.category.LEANBACK_LAUNCHER"  />
-            <category android:name="android.intent.category.LAUNCHER"/>
-        </intent>
-    </queries>
-
 </manifest>

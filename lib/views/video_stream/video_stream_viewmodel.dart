@@ -32,9 +32,10 @@ class VideoStreamViewModel extends PageViewModel {
   }
 
   void _initializeController(int id) async {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(Duration(milliseconds: 200), (timer) {
       _pageNode.requestFocus();
     });
+
     _videoPlayerController = VlcPlayerController.network(
       "${_config.apiEndpoint}/api/v1/Video/stream/${id}",
       hwAcc: HwAcc.full,
@@ -48,10 +49,11 @@ class VideoStreamViewModel extends PageViewModel {
     notifyListeners();
   }
 
-  void onKeypressed(RawKeyEvent value) {
+  void onKeypressed(RawKeyEvent value) async {
     if (value is RawKeyDownEvent) return;
 
     if (value.logicalKey.keyLabel == "Go Back") {
+      await _videoPlayerController?.pause();
       router.changePage(
         "/dashboard",
         pageContext,
