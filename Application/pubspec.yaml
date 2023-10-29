@@ -21,6 +21,7 @@ dependencies:
   collection: ^1.17.2
   http: ^1.1.0
   path_provider: ^2.0.1
+  pointycastle: ^3.7.3
 
 dev_dependencies:
   flutter_test:
