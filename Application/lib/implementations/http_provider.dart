@@ -71,12 +71,9 @@ class HttpProvider implements IHttpProviderService {
       if (result.statusCode == 200) {
         return result.body;
       }
-      print(result.body);
 
       return null;
     } catch (ex) {
-      print(ex);
-
       return null;
     }
   }

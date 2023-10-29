@@ -24,8 +24,8 @@ class MovieCarosuel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Row Selected ${rowindex} ${rowindex == globalRowIndex}");
-    print("Global Column ${globalColumnIndex}");
+    // print("Row Selected ${rowindex} ${rowindex == globalRowIndex}");
+    // print("Global Column ${globalColumnIndex}");
 
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => MovieCarosuelViewModel(context),
