@@ -15,7 +15,6 @@ class DashboardViewModel extends PageViewModel {
   List<Category> _movieLists = [];
   List<Category> get movieLists => _movieLists;
 
-  (Category? e, int movie) _previousSelection = (null, 0);
   int _rowIndex = 0;
   int get rowIndex => _rowIndex;
 

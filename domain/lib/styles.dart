@@ -91,7 +91,6 @@ class ThemeStyles {
             decorationColor: color,
           );
 
-          break;
         case false:
           return TextStyle(
             color: color,
@@ -103,8 +102,6 @@ class ThemeStyles {
             decoration: decoration,
             decorationColor: color,
           );
-
-          break;
       }
     } else {
       return TextStyle(

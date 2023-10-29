@@ -2,7 +2,6 @@ import 'package:domain/models/movie.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:presentation/components/movie_thumbnail/movie_thumbnail_viewmodel.dart';
-import 'package:presentation/views/video_stream/video_stream_view.dart';
 import 'package:stacked/stacked.dart';
 
 class MovieThumbnail extends StatelessWidget {

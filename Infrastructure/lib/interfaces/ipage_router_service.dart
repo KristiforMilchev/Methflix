@@ -1,5 +1,4 @@
 import 'package:domain/models/core_router.dart';
-import 'package:domain/models/enums.dart';
 import 'package:domain/models/transition_data.dart';
 import 'package:flutter/material.dart';
 import 'package:infrastructure/interfaces/iobserver.dart';

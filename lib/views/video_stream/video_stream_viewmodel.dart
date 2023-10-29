@@ -7,12 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
-import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 import 'package:presentation/page_view_model.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoStreamViewModel extends PageViewModel {
-  late IVideoStreamService _videoStreamService;
   late AppConfig _config;
   Widget _activeScreen = Placeholder();
   FocusNode _pageNode = FocusNode();
@@ -29,7 +27,6 @@ class VideoStreamViewModel extends PageViewModel {
   ready(String name) async {
     var configuration = getIt.get<IConfiguration>();
     _config = await configuration.getConfig();
-    _videoStreamService = getIt.get<IVideoStreamService>();
     var data = router.getPageBindingData() as int;
     _initializeController(data);
   }

@@ -5,7 +5,6 @@ import 'package:application/implementations/local_storage.dart';
 import 'package:application/implementations/observer.dart';
 import 'package:application/implementations/page_router_service.dart';
 import 'package:application/implementations/video_stream_service.dart';
-import 'package:domain/models/app_config.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
