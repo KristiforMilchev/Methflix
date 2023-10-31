@@ -47,9 +47,6 @@ class DashboardViewModel extends PageViewModel {
       _node.requestFocus();
       _videoStreamService = getIt.get<IVideoStreamService>();
       _movieLists = await _videoStreamService.getAllCategories();
-      Timer.periodic(Duration(seconds: 1), (timer) async {
-        _node.requestFocus();
-      });
 
       notifyListeners();
     } catch (ex) {
