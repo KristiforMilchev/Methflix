@@ -63,8 +63,10 @@ class VideoStreamViewModel extends PageViewModel {
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
+  void dispose() async {
+    _pageNode.dispose();
+
+    await _controller.dispose();
     super.dispose();
   }
 }

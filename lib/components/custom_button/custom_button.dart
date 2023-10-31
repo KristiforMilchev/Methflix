@@ -20,6 +20,7 @@ class CustomButton extends StatelessWidget {
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => CustomButtonViewModel(),
       builder: (context, viewModel, child) => InkWell(
+        autofocus: false,
         splashFactory: NoSplash.splashFactory,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
