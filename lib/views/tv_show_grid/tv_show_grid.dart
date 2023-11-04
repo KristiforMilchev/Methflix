@@ -25,7 +25,6 @@ class TvShowGrid extends StatelessWidget {
               children: viewModel.seasonsData.map(
                 (e) {
                   var season = e;
-
                   return Container(
                     padding: EdgeInsets.all(8),
                     child: Column(
@@ -33,34 +32,14 @@ class TvShowGrid extends StatelessWidget {
                       children: [
                         const SizedBox(height: 16),
                         Text(
-                          "Season ${e.season}",
+                          "Season ${e.season} ${viewModel.columnIndex} ${viewModel.rowIndex}",
                           style: ThemeStyles.regularParagraphOv(
                             size: 18,
                           ),
                           textAlign: TextAlign.start,
                         ),
                         const SizedBox(height: 6),
-                        for (int i = 0; i < season.movies.length; i += 4)
-                          Container(
-                            padding:
-                                i < 4 ? null : EdgeInsets.fromLTRB(0, 35, 0, 0),
-                            child: Row(
-                              children: season.movies.skip(i).take(4).map(
-                                (movie) {
-                                  return MovieThumbnail(
-                                    selected: season.movies.indexOf(movie) ==
-                                        viewModel.columnIndex,
-                                    movie: Movie(
-                                      id: movie.id,
-                                      thumbnail: "movie",
-                                      name: movie.name,
-                                      length: Duration(),
-                                    ),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                          ),
+                        ...viewModel.getMovie(e)
                       ],
                     ),
                   );
