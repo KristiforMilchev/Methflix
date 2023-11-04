@@ -46,8 +46,7 @@ class DashboardView extends StatelessWidget {
                               child: Text(
                                 "Movies",
                                 style: ThemeStyles.regularParagraphOv(
-                                  color: viewModel.columnIndex == 0 &&
-                                          viewModel.rowIndex == -1
+                                  color: viewModel.contentType
                                       ? ThemeStyles.accent100
                                       : ThemeStyles.accent200,
                                 ),
@@ -69,9 +68,8 @@ class DashboardView extends StatelessWidget {
                               child: Text(
                                 "Tv Shows",
                                 style: ThemeStyles.regularParagraphOv(
-                                  color: viewModel.columnIndex == 1 &&
-                                          viewModel.rowIndex == -1
-                                      ? Colors.red
+                                  color: !viewModel.contentType
+                                      ? ThemeStyles.accent100
                                       : ThemeStyles.accent200,
                                 ),
                               ),
