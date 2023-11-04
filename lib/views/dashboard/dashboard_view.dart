@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:presentation/components/custom_button/custom_button.dart';
 import 'package:presentation/components/movie_carousel/movie_carosuel.dart';
 import 'package:presentation/components/tv_show_caraousel/tv_show_caraousel.dart';
-import 'package:presentation/components/tv_show_grid/tv_show_grid.dart';
+import 'package:presentation/views/tv_show_grid/tv_show_grid.dart';
 import 'package:presentation/views/dashboard/dashboard_viewmodel.dart';
 import 'package:show_fps/show_fps.dart';
 import 'package:stacked/stacked.dart';
@@ -110,15 +110,6 @@ class DashboardView extends StatelessWidget {
                                   ),
                           )
                           .toList(),
-                    if (viewModel.seasonContentVisible)
-                      TvShowGrid(
-                        rowindex: viewModel.rowIndex,
-                        globalRowIndex: 0,
-                        tvShow: viewModel.tvShow,
-                        globalColumnIndex: viewModel.columnIndex,
-                        horizontal: viewModel.horizontalController,
-                        vertical: viewModel.scrollController,
-                      )
                   ],
                 ),
               ),
