@@ -33,13 +33,14 @@ class MovieCarosuel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(rowindex.toString()),
-            Text(globalRowIndex.toString()),
+            const SizedBox(height: 25),
             Container(
               padding: EdgeInsets.all(5),
               child: Text(
                 category.name,
-                style: ThemeStyles.regularHeading,
+                style: ThemeStyles.regularParagraphOv(
+                  size: 18,
+                ),
                 textAlign: TextAlign.start,
               ),
             ),

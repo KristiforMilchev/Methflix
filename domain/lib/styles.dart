@@ -3,21 +3,26 @@ import 'package:flutter/material.dart';
 class ThemeStyles {
   static double? width;
   static double? height;
+  // Primary Colors
+  static Color primary100 = Color(0xFF1A237E);
+  static Color primary200 = Color(0xFF534bae);
+  static Color primary300 = Color(0xFFb8a6ff);
 
-  static Color faintWhite = const Color.fromRGBO(
-    255,
-    255,
-    255,
-    0.54,
-  );
+  // Accent Colors
+  static Color accent100 = Color(0xFFFF4081);
+  static Color accent200 = Color(0xFFFFE4FF);
 
-  static Color mainColor = const Color.fromRGBO(14, 41, 84, 1);
-  static Color secondaryColor = const Color.fromRGBO(31, 110, 140, 1);
-  static Color acentColor = const Color.fromRGBO(46, 138, 153, 1);
-  static Color secondAccent = const Color.fromRGBO(132, 167, 161, 1);
+  // Text Colors
+  static Color text100 = Color(0xFFFFFFFF);
+  static Color text200 = Color(0xFFE0E0E0);
+
+  // Background Colors
+  static Color background100 = Color(0xFF0F1C3F);
+  static Color background200 = Color(0xFF212B50);
+  static Color background300 = Color(0xFF3B426A);
 
   static TextStyle regularHeading = TextStyle(
-    color: const Color.fromRGBO(255, 255, 255, 1),
+    color: text200,
     letterSpacing: 2,
     fontSize: width != null ? 20 : 18,
     fontFamily: "Loto",
@@ -25,7 +30,7 @@ class ThemeStyles {
   );
 
   static TextStyle regularParagraph = TextStyle(
-    color: const Color.fromRGBO(255, 255, 255, 0.72),
+    color: text200,
     fontSize: width != null ? 14 : 12,
     letterSpacing: 2,
     fontFamily: "Loto",
@@ -33,43 +38,26 @@ class ThemeStyles {
   );
 
   static TextStyle whiteParagraph = TextStyle(
-    color: const Color.fromRGBO(255, 255, 255, 1),
+    color: text200,
     fontSize: width != null ? 14 : 12,
     letterSpacing: 2,
     fontFamily: "Loto",
     fontWeight: FontWeight.w400,
   );
 
-  static TextStyle regularInnerHeading = const TextStyle(
-    color: Color.fromRGBO(255, 255, 255, 1),
+  static TextStyle regularInnerHeading = TextStyle(
+    color: text200,
     fontSize: 18,
     letterSpacing: 2,
     fontFamily: "Loto",
     fontWeight: FontWeight.w500,
   );
 
-  static var darkBtnSolid = const Color.fromRGBO(21, 21, 21, 1);
+  static var darkBtnSolid = Color(0xFF151515);
 
-  static BoxDecoration getDesktopGradient(Alignment start, Alignment end,
-      {Color c1 = const Color.fromRGBO(21, 155, 222, 0.24),
-      Color c2 = const Color.fromRGBO(21, 155, 222, 0.00),
-      List<double> stops = const [0.1, 0.9]}) {
-    return BoxDecoration(
-      gradient: LinearGradient(
-        colors: [
-          c1,
-          c2,
-        ],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        tileMode: TileMode.clamp,
-      ),
-    );
-  }
-
-  //Ovverides
+  // Overrides
   static TextStyle regularParagraphOv({
-    Color color = Colors.white,
+    Color color = const Color(0xFFE0E0E0),
     double? lineSpacing,
     double? size,
     FontWeight? weight,
@@ -118,7 +106,7 @@ class ThemeStyles {
   }
 
   static TextStyle innerHeadingOv({
-    Color color = Colors.white,
+    Color color = const Color(0xFFFFFFFF),
     double? lineSpacing,
     double? letterSpacing,
     FontWeight? weight,

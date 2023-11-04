@@ -121,8 +121,8 @@ class CustomTextField extends StatelessWidget {
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: isClickable
-                    ? ThemeStyles.faintWhite
-                    : ThemeStyles.faintWhite.withAlpha(60),
+                    ? ThemeStyles.accent100
+                    : ThemeStyles.text200.withAlpha(60),
               ),
               borderRadius: BorderRadius.circular(10),
             ),

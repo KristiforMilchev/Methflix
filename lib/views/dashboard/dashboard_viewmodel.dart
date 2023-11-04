@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:domain/models/categorie.dart';
 import 'package:domain/models/enums.dart';
 import 'package:domain/models/transition_data.dart';

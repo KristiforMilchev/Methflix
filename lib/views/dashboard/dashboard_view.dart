@@ -14,7 +14,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: ThemeStyles.mainColor,
+      color: ThemeStyles.background100,
       child: ViewModelBuilder.reactive(
         viewModelBuilder: () => DashboardViewModel(context),
         onViewModelReady: (viewModel) => viewModel.ready(),
@@ -27,35 +27,59 @@ class DashboardView extends StatelessWidget {
                 onKey: (value) => viewModel.onRowChanged(value),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          widget: Text(
-                            "Movies",
-                            style: ThemeStyles.regularParagraphOv(
-                              color: viewModel.columnIndex == 0 &&
-                                      viewModel.rowIndex == -1
-                                  ? Colors.red
-                                  : ThemeStyles.acentColor,
+                    Container(
+                      color: ThemeStyles.background200,
+                      padding: EdgeInsets.all(2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomButton(
+                            widget: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: viewModel.rowIndex == -1 &&
+                                      viewModel.columnIndex == 0
+                                  ? BoxDecoration(
+                                      color: ThemeStyles.background100,
+                                      borderRadius: BorderRadius.circular(6),
+                                    )
+                                  : null,
+                              child: Text(
+                                "Movies",
+                                style: ThemeStyles.regularParagraphOv(
+                                  color: viewModel.columnIndex == 0 &&
+                                          viewModel.rowIndex == -1
+                                      ? ThemeStyles.accent100
+                                      : ThemeStyles.accent200,
+                                ),
+                              ),
                             ),
+                            callback: () {},
                           ),
-                          callback: () {},
-                        ),
-                        const SizedBox(width: 16),
-                        CustomButton(
-                          widget: Text(
-                            "Tv Shows",
-                            style: ThemeStyles.regularParagraphOv(
-                              color: viewModel.columnIndex == 1 &&
-                                      viewModel.rowIndex == -1
-                                  ? Colors.red
-                                  : ThemeStyles.acentColor,
+                          const SizedBox(width: 6),
+                          CustomButton(
+                            widget: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: viewModel.rowIndex == -1 &&
+                                      viewModel.columnIndex == 1
+                                  ? BoxDecoration(
+                                      color: ThemeStyles.background100,
+                                      borderRadius: BorderRadius.circular(6),
+                                    )
+                                  : null,
+                              child: Text(
+                                "Tv Shows",
+                                style: ThemeStyles.regularParagraphOv(
+                                  color: viewModel.columnIndex == 1 &&
+                                          viewModel.rowIndex == -1
+                                      ? Colors.red
+                                      : ThemeStyles.accent200,
+                                ),
+                              ),
                             ),
-                          ),
-                          callback: () {},
-                        )
-                      ],
+                            callback: () {},
+                          )
+                        ],
+                      ),
                     ),
                     if (!viewModel.seasonContentVisible)
                       ...viewModel.movieLists
