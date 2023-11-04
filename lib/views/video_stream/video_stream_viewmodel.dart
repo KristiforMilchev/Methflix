@@ -41,8 +41,21 @@ class VideoStreamViewModel extends PageViewModel {
       hwAcc: HwAcc.full,
       autoPlay: true,
       options: VlcPlayerOptions(
-          video: VlcVideoOptions(["--drop-late-frames"]),
-          rtp: VlcRtpOptions(["--rtsp-tcp"])),
+        advanced: VlcAdvancedOptions(
+          [
+            "--network-caching=200",
+          ],
+        ),
+        video: VlcVideoOptions(["--drop-late-frames"]),
+        http: VlcHttpOptions(
+          [
+            "--drop-late-frames",
+          ],
+        ),
+        rtp: VlcRtpOptions(
+          ["--rtsp-tcp"],
+        ),
+      ),
     );
     await _videoPlayerController?.setVolume(100);
     await _videoPlayerController?.play();

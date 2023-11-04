@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:domain/models/http_request.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -139,13 +138,13 @@ class HttpProvider implements IHttpProviderService {
   }
 
   validateAccessToken(String token) async {
-    var certificate = await getPublicKey();
-    JWT? verify = JWT.tryVerify(token, RSAPublicKey(certificate));
-    if (verify != null) {
-      var payload = verify.payload as Map<String, dynamic>;
-      var existing = payload['access'] as List<dynamic>;
-      existing.map((e) => cIds.add(e)).toList();
-    }
+    // var certificate = await getPublicKey();
+    // JWT? verify = JWT.tryVerify(token, RSAPublicKey(certificate));
+    // if (verify != null) {
+    //   var payload = verify.payload as Map<String, dynamic>;
+    //   var existing = payload['access'] as List<dynamic>;
+    //   existing.map((e) => cIds.add(e)).toList();
+    // }
   }
 
   @override
