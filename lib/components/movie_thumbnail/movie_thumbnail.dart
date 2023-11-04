@@ -1,6 +1,7 @@
 import 'package:domain/models/movie.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:presentation/components/movie_thumbnail/movie_thumbnail_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
@@ -39,12 +40,27 @@ class MovieThumbnail extends StatelessWidget {
                   child: Stack(
                     clipBehavior: Clip.hardEdge,
                     children: [
-                      Container(
-                        child: Image.memory(
-                          viewModel.thumbnail,
-                          fit: BoxFit.fill,
-                          width: ThemeStyles.height,
-                          height: ThemeStyles.height,
+                      Visibility(
+                        visible: !viewModel.missingImage,
+                        child: Container(
+                          child: Image.memory(
+                            viewModel.thumbnail,
+                            fit: BoxFit.fill,
+                            width: ThemeStyles.height,
+                            height: ThemeStyles.height,
+                          ),
+                        ),
+                        replacement: Container(
+                          width: ThemeStyles.width! / 4.5,
+                          color: ThemeStyles.background300,
+                          padding: EdgeInsets.all(60),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              "packages/domain/assets/images/${movie.thumbnail}.svg",
+                              fit: BoxFit.fill,
+                              alignment: Alignment.center,
+                            ),
+                          ),
                         ),
                       ),
                       Positioned(

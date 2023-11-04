@@ -9,8 +9,8 @@ class SeasonMovie {
 
   factory SeasonMovie.fromJson(Map<String, dynamic> json) {
     return SeasonMovie(
-      id: json['Id'] as int,
-      name: json['Name'] as String,
+      id: json['id'] as int,
+      name: json['name'] as String,
     );
   }
 }

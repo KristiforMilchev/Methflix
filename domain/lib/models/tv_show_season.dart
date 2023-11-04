@@ -11,8 +11,8 @@ class TvShowSeason {
 
   factory TvShowSeason.fromJson(Map<String, dynamic> json) {
     return TvShowSeason(
-      name: json['Name'] as String,
-      seasons: (json['Seasons'] as List)
+      name: json['name'] as String,
+      seasons: (json['seasons'] as List)
           .map((season) => SeasonData.fromJson(season))
           .toList(),
     );

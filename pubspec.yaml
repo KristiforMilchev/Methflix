@@ -85,6 +85,8 @@ flutter:
     - packages/domain/assets/images/scan.svg
     - packages/domain/assets/images/add.svg
     - packages/domain/assets/images/list.svg
+    - packages/domain/assets/images/movie.svg
+    - packages/domain/assets/images/season.svg
 
     #Configs
     - packages/domain/config.json
