@@ -4,7 +4,6 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:presentation/views/video_stream/video_stream_viewmodel.dart';
 import 'package:show_fps/show_fps.dart';
 import 'package:stacked/stacked.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoStreamView extends StatelessWidget {
   final String name;
