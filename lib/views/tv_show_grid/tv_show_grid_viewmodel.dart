@@ -1,8 +1,10 @@
+import 'package:domain/models/movie.dart';
 import 'package:domain/models/season_data.dart';
 import 'package:domain/models/tv_show.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
+import 'package:presentation/components/movie_thumbnail/movie_thumbnail.dart';
 import 'package:presentation/page_view_model.dart';
 
 class TvShowGridViewModel extends PageViewModel {
@@ -28,15 +30,25 @@ class TvShowGridViewModel extends PageViewModel {
 
   TvShowGridViewModel(super.context);
 
-  int movieRow = 1;
+  int _movieRows = 0;
+  int get movieRows => _movieRows;
+
+  int _activeRow = 0;
+  int get activeRow => _activeRow;
 
   ready() async {
     _streamService = getIt.get<IVideoStreamService>();
     _tvShow = router.getPageBindingData() as TvShow;
     var tvSeason = await _streamService.getSeasonData(_tvShow.id);
     if (tvSeason == null) return;
-
+    _node.requestFocus();
     _seasonData = tvSeason.seasons;
+    _seasonData.map((e) {
+      for (int i = 0; i < e.movies.length; i += 4) {
+        _movieRows++;
+      }
+    }).toList();
+
     notifyListeners();
   }
 
@@ -48,18 +60,6 @@ class TvShowGridViewModel extends PageViewModel {
       _columnIndex = 0;
       onMoveVertical(value.logicalKey.keyLabel);
       if (_rowIndex != -1) onMoveHorizontal("Arrow Left");
-
-      return;
-    }
-
-    if (_rowIndex == -1 && value.logicalKey.keyLabel == "Arrow Right") {
-      _columnIndex++;
-      notifyListeners();
-      return;
-    }
-
-    if (_rowIndex == -1 && value.logicalKey.keyLabel == "Arrow Left") {
-      _columnIndex--;
       notifyListeners();
       return;
     }
@@ -80,8 +80,10 @@ class TvShowGridViewModel extends PageViewModel {
   void onMoveVertical(String keyLabel) {
     if (keyLabel == "Arrow Up" && _rowIndex - 1 >= -1) {
       _rowIndex--;
-    } else if (_rowIndex + 1 < _seasonData.length && keyLabel == "Arrow Down")
+    } else if (_rowIndex + 1 < _movieRows && keyLabel == "Arrow Down")
       _rowIndex++;
+
+    var current = _rowIndex;
   }
 
   void onMoveHorizontal(String keyLabel) {
@@ -90,9 +92,48 @@ class TvShowGridViewModel extends PageViewModel {
         _columnIndex--;
       }
     } else if (keyLabel == "Arrow Right") {
-      if (_columnIndex < _seasonData[_rowIndex].movies.length - 1) {
+      if (_columnIndex <= 4) {
         _columnIndex++;
       }
+
+      if (_columnIndex >= 4) {
+        _columnIndex = 0;
+      }
     }
+  }
+
+  getMovie(SeasonData e) {
+    var movies = [];
+    var totalInSeason = e.movies.length;
+    var currentRows = [];
+    var current = 0;
+    for (var i = 0; i < totalInSeason; i = i + 4) {
+      currentRows.add(current);
+
+      print("Row Index ${rowIndex} this row ${current} ");
+
+      movies.add(Container(
+        padding: null,
+        child: Row(children: [
+          ...e.movies.skip(i).take(4).map((m) {
+            var rowSelected = rowIndex == current;
+
+            print(rowSelected);
+            return MovieThumbnail(
+              selected: rowSelected && columnIndex == e.movies.indexOf(m),
+              movie: Movie(
+                id: m.id,
+                thumbnail: "movie",
+                name: m.name,
+                length: Duration(),
+              ),
+            );
+          })
+        ]),
+      ));
+      current++;
+    }
+
+    return movies;
   }
 }
