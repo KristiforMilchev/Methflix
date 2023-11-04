@@ -3,6 +3,7 @@ import 'package:domain/models/transition_data.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:presentation/views/dashboard/dashboard_view.dart';
+import 'package:presentation/views/tv_show_grid/tv_show_grid.dart';
 import 'package:presentation/views/video_stream/video_stream_view.dart';
 
 class ApplicationRouter {
@@ -68,7 +69,8 @@ class ApplicationRouter {
       ),
       1,
       Duration(milliseconds: 500)
-    )
+    ),
+    ("tv-show-grid", TvShowGrid(), 1, Duration(milliseconds: 500)),
   ];
 
   static const Duration animationDuration = Duration(milliseconds: 500);

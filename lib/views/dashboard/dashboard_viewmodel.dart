@@ -173,8 +173,14 @@ class DashboardViewModel extends PageViewModel {
   void openSeasonContent() {
     _seasonContentVisible = true;
     _tvShow = _movieLists[_rowIndex].shows[_columnIndex];
-    _rowIndex = 0;
-    _columnIndex = 0;
+    router.changePage(
+      "/tv-show-grid",
+      pageContext,
+      TransitionData(
+        next: PageTransition.slideForward,
+      ),
+      bindingData: _tvShow,
+    );
     notifyListeners();
   }
 }
