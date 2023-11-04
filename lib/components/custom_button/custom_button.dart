@@ -1,3 +1,4 @@
+import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:presentation/components/custom_button/custom_button_viewmodel.dart';
 import 'package:stacked/stacked.dart';
@@ -21,9 +22,6 @@ class CustomButton extends StatelessWidget {
       viewModelBuilder: () => CustomButtonViewModel(),
       builder: (context, viewModel, child) => InkWell(
         autofocus: false,
-        splashFactory: NoSplash.splashFactory,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
         onTap: () {
           if (disableEffect) {
             callback.call();

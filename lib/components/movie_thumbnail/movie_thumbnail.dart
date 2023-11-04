@@ -8,61 +8,71 @@ class MovieThumbnail extends StatelessWidget {
   final Movie movie;
   final bool selected;
   final double? size;
-  const MovieThumbnail(
-      {super.key, required this.movie, this.selected = false, this.size});
+
+  const MovieThumbnail({
+    super.key,
+    required this.movie,
+    this.selected = false,
+    this.size,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => MovieThumbnailViewModel(context),
       onViewModelReady: (viewModel) => viewModel.ready(movie, selected),
-      builder: (context, viewModel, child) => Visibility(
+      builder: (context, viewModel, child) {
+        return Visibility(
           visible: selected && viewModel.shouldPlay,
           replacement: Container(
-            decoration: selected
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: ThemeStyles.secondaryColor,
-                      style: BorderStyle.solid,
-                      width: 5,
-                    ),
-                  )
-                : null,
-            margin: selected ? EdgeInsets.all(5) : null,
+            margin: selected
+                ? EdgeInsets.fromLTRB(5, 0, 45, 0)
+                : EdgeInsets.fromLTRB(5, 0, 0, 0),
             width: size,
-            child: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(12), // Match the border radius
-              clipBehavior: Clip.hardEdge,
-              child: Stack(
-                children: [
-                  Image.memory(
-                    viewModel.thumbnail,
-                    fit: BoxFit.fill,
-                    width: ThemeStyles.height,
-                    height: ThemeStyles.height,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      color: ThemeStyles.darkBtnSolid,
-                      child: Text(
-                        movie.name,
-                        style: TextStyle(
-                          color: ThemeStyles.secondAccent,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+            child: Container(
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeInOutBack,
+                transform: Matrix4.identity()..scale(selected ? 1.2 : 1.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Stack(
+                    clipBehavior: Clip.hardEdge,
+                    children: [
+                      Container(
+                        child: Image.memory(
+                          viewModel.thumbnail,
+                          fit: BoxFit.fill,
+                          width: ThemeStyles.height,
+                          height: ThemeStyles.height,
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          color: ThemeStyles.background200,
+                          child: Text(
+                            movie.name,
+                            style: TextStyle(
+                              color: selected
+                                  ? ThemeStyles.accent100
+                                  : ThemeStyles.text200,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-          child: Placeholder()),
+          child: Placeholder(),
+        );
+      },
     );
   }
 }

@@ -29,11 +29,6 @@ class MyApp extends StatelessWidget {
 
     return ViewModelBuilder<MainViewModel>.reactive(
       builder: (context, model, child) => MaterialApp.router(
-        theme: ThemeData(
-          appBarTheme: AppBarTheme(
-            color: Colors.white,
-          ),
-        ),
         supportedLocales: [
           Locale('en', 'US'), // English
           Locale('de', 'DE'), // German
