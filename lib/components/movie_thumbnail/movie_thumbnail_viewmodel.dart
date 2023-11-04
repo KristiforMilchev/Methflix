@@ -17,10 +17,15 @@ class MovieThumbnailViewModel extends PageViewModel {
 
   Uint8List _thumbnail = Uint8List(2);
   Uint8List get thumbnail => _thumbnail;
+  bool _missingImage = false;
+  bool get missingImage => _missingImage;
 
   ready(Movie movie, bool initialSelected) {
+    _missingImage = movie.thumbnail == "movie" ? true : false;
+    _missingImage = movie.thumbnail == "season" ? true : _missingImage;
+
     _isSelected = initialSelected;
-    _thumbnail = loadImage(movie);
+    if (!_missingImage) _thumbnail = loadImage(movie);
     observer.subscribe("on_movie_selected", movieSelected);
     _movie = movie;
   }

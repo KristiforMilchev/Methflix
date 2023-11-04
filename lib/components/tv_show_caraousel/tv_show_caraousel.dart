@@ -54,7 +54,9 @@ class TvShowCaraousel extends StatelessWidget {
                         rowindex == globalRowIndex,
                     movie: Movie(
                       id: -1,
-                      thumbnail: category.shows[index].thumbnail,
+                      thumbnail: category.shows[index].thumbnail.isEmpty
+                          ? "season"
+                          : category.shows[index].thumbnail,
                       name: category.shows[index].name,
                       length: Duration(),
                     ),

@@ -37,7 +37,8 @@ class DashboardView extends StatelessWidget {
                             widget: Container(
                               padding: EdgeInsets.all(5),
                               decoration: viewModel.rowIndex == -1 &&
-                                      viewModel.columnIndex == 0
+                                          viewModel.columnIndex == 0 ||
+                                      viewModel.contentType
                                   ? BoxDecoration(
                                       color: ThemeStyles.background100,
                                       borderRadius: BorderRadius.circular(6),
@@ -59,7 +60,8 @@ class DashboardView extends StatelessWidget {
                             widget: Container(
                               padding: EdgeInsets.all(5),
                               decoration: viewModel.rowIndex == -1 &&
-                                      viewModel.columnIndex == 1
+                                          viewModel.columnIndex == 1 ||
+                                      !viewModel.contentType
                                   ? BoxDecoration(
                                       color: ThemeStyles.background100,
                                       borderRadius: BorderRadius.circular(6),
@@ -111,7 +113,7 @@ class DashboardView extends StatelessWidget {
                     if (viewModel.seasonContentVisible)
                       TvShowGrid(
                         rowindex: viewModel.rowIndex,
-                        globalRowIndex: viewModel.rowIndex,
+                        globalRowIndex: 0,
                         tvShow: viewModel.tvShow,
                         globalColumnIndex: viewModel.columnIndex,
                         horizontal: viewModel.horizontalController,

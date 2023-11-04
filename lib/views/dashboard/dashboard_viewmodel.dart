@@ -154,7 +154,9 @@ class DashboardViewModel extends PageViewModel {
     );
 
     observer.getObserver(
-        "on_movie_selected", _movieLists[_rowIndex].movies[_columnIndex]);
+      "on_movie_selected",
+      _movieLists[_rowIndex].movies[_columnIndex],
+    );
 
     notifyListeners();
   }
@@ -171,6 +173,8 @@ class DashboardViewModel extends PageViewModel {
   void openSeasonContent() {
     _seasonContentVisible = true;
     _tvShow = _movieLists[_rowIndex].shows[_columnIndex];
+    _rowIndex = 0;
+    _columnIndex = 0;
     notifyListeners();
   }
 }

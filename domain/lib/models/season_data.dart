@@ -11,10 +11,10 @@ class SeasonData {
 
   factory SeasonData.fromJson(Map<String, dynamic> json) {
     return SeasonData(
-      movies: (json['Movies'] as List)
+      movies: (json['movies'] as List)
           .map((movie) => SeasonMovie.fromJson(movie))
           .toList(),
-      season: json['Season'] as int,
+      season: json['season'] as int,
     );
   }
 }
