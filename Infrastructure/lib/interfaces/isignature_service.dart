@@ -1,7 +1,10 @@
 import 'package:pointycastle/pointycastle.dart';
 
 abstract class ISignatureService {
-  Future<void> signAndVerifyMessage();
+  Future<String> signAndVerifyMessage(
+    RSAPrivateKey privateKey,
+    RSAPublicKey publicKey,
+  );
   Future<(RSAPrivateKey publicKey, RSAPublicKey privateKey)>
       generateRsaPrivateKey();
   RSASignature signMessage(RSAPrivateKey privateKey, String message);
