@@ -103,8 +103,6 @@ class TvShowGridViewModel extends PageViewModel {
       _rowIndex--;
     } else if (_rowIndex + 1 < _movieRows && keyLabel == "Arrow Down")
       _rowIndex++;
-
-    var current = _rowIndex;
   }
 
   void onMoveHorizontal(String keyLabel) {

@@ -4,6 +4,7 @@ import 'package:application/implementations/http_provider.dart';
 import 'package:application/implementations/local_storage.dart';
 import 'package:application/implementations/observer.dart';
 import 'package:application/implementations/page_router_service.dart';
+import 'package:application/implementations/signature_service.dart';
 import 'package:application/implementations/video_stream_service.dart';
 
 import 'package:get_it/get_it.dart';
@@ -13,6 +14,7 @@ import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:infrastructure/interfaces/ilocal_storage.dart';
 import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:infrastructure/interfaces/ipage_router_service.dart';
+import 'package:infrastructure/interfaces/isignature_service.dart';
 import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 
 GetIt getIt = GetIt.I;
@@ -26,6 +28,8 @@ void registerDependency() async {
   getIt.registerSingleton<IPageRouterService>(PageRouterService(observer));
   getIt.registerSingleton<IObserver>(observer);
   getIt.registerSingleton<IlocalStorage>(localStorage);
+  getIt.registerSingleton<ISignatureService>(SignatureService());
+
   var configData = Configuration();
   var config = await configData.getConfig();
   getIt.registerSingleton<IVideoStreamService>(

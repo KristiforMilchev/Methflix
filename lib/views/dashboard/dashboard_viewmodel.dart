@@ -6,6 +6,7 @@ import 'package:domain/models/tv_show.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:infrastructure/interfaces/isignature_service.dart';
 import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 import 'package:presentation/page_view_model.dart';
 
@@ -40,10 +41,19 @@ class DashboardViewModel extends PageViewModel {
   TvShow _tvShow = TvShow(id: 0, name: "", thumbnail: "");
   TvShow get tvShow => _tvShow;
 
+  late ISignatureService _signatureService;
+
   ready() async {
     try {
       _node.requestFocus();
       _videoStreamService = getIt.get<IVideoStreamService>();
+      _signatureService = getIt.get<ISignatureService>();
+      var rsaData = await _signatureService.generateRsaPrivateKey();
+      var signature = await _signatureService.signAndVerifyMessage(
+        rsaData.$1,
+        rsaData.$2,
+      );
+
       _movieLists = await _videoStreamService.getAllCategories();
 
       notifyListeners();
