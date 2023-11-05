@@ -1,6 +1,7 @@
 import 'package:domain/models/movie.dart';
 import 'package:domain/models/season_data.dart';
 import 'package:domain/models/tv_show.dart';
+import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
@@ -16,7 +17,7 @@ class TvShowGridViewModel extends PageViewModel {
   int _rowIndex = 0;
   int get rowIndex => _rowIndex;
 
-  int _columnIndex = 0;
+  int _columnIndex = 1;
   int get columnIndex => _columnIndex;
 
   FocusNode _node = FocusNode();
@@ -57,9 +58,8 @@ class TvShowGridViewModel extends PageViewModel {
 
     if (value.logicalKey.keyLabel == "Arrow Down" ||
         value.logicalKey.keyLabel == "Arrow Up") {
-      _columnIndex = 0;
       onMoveVertical(value.logicalKey.keyLabel);
-      if (_rowIndex != -1) onMoveHorizontal("Arrow Left");
+      scrollToNextRow(_activeRow);
       notifyListeners();
       return;
     }
@@ -96,7 +96,7 @@ class TvShowGridViewModel extends PageViewModel {
         _columnIndex++;
       }
 
-      if (_columnIndex >= 4) {
+      if (_columnIndex >= 5) {
         _columnIndex = 0;
       }
     }
@@ -111,16 +111,22 @@ class TvShowGridViewModel extends PageViewModel {
       currentRows.add(current);
 
       print("Row Index ${rowIndex} this row ${current} ");
+      var r = 0;
+      var rowSelected = rowIndex == current;
 
       movies.add(Container(
-        padding: null,
+        margin: rowSelected
+            ? EdgeInsets.fromLTRB(0, 10, 0, 35)
+            : EdgeInsets.fromLTRB(0, 5, 0, 0),
         child: Row(children: [
           ...e.movies.skip(i).take(4).map((m) {
-            var rowSelected = rowIndex == current;
-
             print(rowSelected);
+            r = r + 1;
+            _activeRow = r;
+            var select = rowSelected && columnIndex == r;
+
             return MovieThumbnail(
-              selected: rowSelected && columnIndex == e.movies.indexOf(m),
+              selected: select,
               movie: Movie(
                 id: m.id,
                 thumbnail: "movie",
@@ -135,5 +141,19 @@ class TvShowGridViewModel extends PageViewModel {
     }
 
     return movies;
+  }
+
+  void scrollToNextRow(int currentRowIndex) async {
+    if (currentRowIndex < _movieRows - 1) {
+      // Calculate the Y-offset of the next row
+      double nextRowOffset = currentRowIndex * (ThemeStyles.height!);
+
+      // Scroll to the next row
+      await _scrollController.animateTo(
+        nextRowOffset + 40,
+        duration: Duration(seconds: 1),
+        curve: Curves.ease,
+      );
+    }
   }
 }

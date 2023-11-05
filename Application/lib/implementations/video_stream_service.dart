@@ -40,7 +40,7 @@ class VideoStreamService implements IVideoStreamService {
 
   @override
   Future<Movie?> getMovie(int id) async {
-    var apiUrl = '$apiEndpoint/API/V1/Movies/${id}';
+    var apiUrl = '$apiEndpoint/API/V1/Movies/$id';
 
     try {
       // Convert the request object to JSON.
