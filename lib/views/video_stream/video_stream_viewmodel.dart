@@ -67,11 +67,7 @@ class VideoStreamViewModel extends PageViewModel {
 
     if (value.logicalKey.keyLabel == "Go Back") {
       await _videoPlayerController?.pause();
-      router.changePage(
-        "/dashboard",
-        pageContext,
-        TransitionData(next: PageTransition.slideBack),
-      );
+      router.backToPrevious(pageContext);
     }
   }
 
