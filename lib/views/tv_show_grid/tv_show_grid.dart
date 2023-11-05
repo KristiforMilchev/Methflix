@@ -1,7 +1,5 @@
-import 'package:domain/models/movie.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:presentation/components/movie_thumbnail/movie_thumbnail.dart';
 import 'package:presentation/views/tv_show_grid/tv_show_grid_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
@@ -24,7 +22,6 @@ class TvShowGrid extends StatelessWidget {
             child: Column(
               children: viewModel.seasonsData.map(
                 (e) {
-                  var season = e;
                   return Container(
                     padding: EdgeInsets.all(8),
                     child: Column(

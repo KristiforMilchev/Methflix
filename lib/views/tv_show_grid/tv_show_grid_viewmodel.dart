@@ -1,5 +1,7 @@
+import 'package:domain/models/enums.dart';
 import 'package:domain/models/movie.dart';
 import 'package:domain/models/season_data.dart';
+import 'package:domain/models/transition_data.dart';
 import 'package:domain/models/tv_show.dart';
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,8 @@ class TvShowGridViewModel extends PageViewModel {
   int _activeRow = 0;
   int get activeRow => _activeRow;
 
+  int _selectedMovie = 0;
+
   ready() async {
     _streamService = getIt.get<IVideoStreamService>();
     _tvShow = router.getPageBindingData() as TvShow;
@@ -44,6 +48,8 @@ class TvShowGridViewModel extends PageViewModel {
     if (tvSeason == null) return;
     _node.requestFocus();
     _seasonData = tvSeason.seasons;
+    _selectedMovie = tvSeason.seasons.first.movies.first.id;
+
     _seasonData.map((e) {
       for (int i = 0; i < e.movies.length; i += 4) {
         _movieRows++;
@@ -73,7 +79,12 @@ class TvShowGridViewModel extends PageViewModel {
     }
 
     if (value.logicalKey.keyLabel == "Select") {
-      notifyListeners();
+      router.changePage(
+        "/video-player",
+        pageContext,
+        TransitionData(next: PageTransition.easeInAndOut),
+        bindingData: _selectedMovie,
+      );
     }
   }
 
@@ -124,7 +135,9 @@ class TvShowGridViewModel extends PageViewModel {
             r = r + 1;
             _activeRow = r;
             var select = rowSelected && columnIndex == r;
-
+            if (select) {
+              _selectedMovie = m.id;
+            }
             return MovieThumbnail(
               selected: select,
               movie: Movie(
