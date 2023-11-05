@@ -4,6 +4,7 @@ class TvShow {
   String thumbnail;
   int movieCount;
   int seasons;
+  String? description;
 
   TvShow({
     required this.id,
@@ -11,6 +12,7 @@ class TvShow {
     required this.thumbnail,
     this.movieCount = 0,
     this.seasons = 1,
+    this.description,
   });
 
   factory TvShow.fromJson(Map<String, dynamic> json) {

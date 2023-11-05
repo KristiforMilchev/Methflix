@@ -12,6 +12,7 @@ import 'package:presentation/page_view_model.dart';
 
 class TvShowGridViewModel extends PageViewModel {
   late TvShow _tvShow;
+  TvShow get tvShow => _tvShow;
   late IVideoStreamService _streamService;
   List<SeasonData> _seasonData = [];
   List<SeasonData> get seasonsData => _seasonData;
@@ -41,12 +42,16 @@ class TvShowGridViewModel extends PageViewModel {
 
   int _selectedMovie = 0;
 
+  bool _missingImage = false;
+  bool get missingImage => _missingImage;
+  Uint8List _thumbnail = Uint8List(1);
+  Uint8List get thumbnail => _thumbnail;
+
   ready() async {
     _streamService = getIt.get<IVideoStreamService>();
     _tvShow = router.getPageBindingData() as TvShow;
     var tvSeason = await _streamService.getSeasonData(_tvShow.id);
     if (tvSeason == null) return;
-    _node.requestFocus();
     _seasonData = tvSeason.seasons;
     _selectedMovie = tvSeason.seasons.first.movies.first.id;
 
@@ -55,6 +60,7 @@ class TvShowGridViewModel extends PageViewModel {
         _movieRows++;
       }
     }).toList();
+    _node.requestFocus();
 
     notifyListeners();
   }
@@ -85,6 +91,10 @@ class TvShowGridViewModel extends PageViewModel {
         TransitionData(next: PageTransition.easeInAndOut),
         bindingData: _selectedMovie,
       );
+    }
+
+    if (value.logicalKey.keyLabel == "Go Back") {
+      router.backToPrevious(pageContext);
     }
   }
 
@@ -157,7 +167,17 @@ class TvShowGridViewModel extends PageViewModel {
   }
 
   void scrollToNextRow(int currentRowIndex) async {
-    if (currentRowIndex < _movieRows - 1) {
+    if (_rowIndex == -1) {
+      // Scroll to the next row
+      await _scrollController.animateTo(
+        0,
+        duration: Duration(seconds: 1),
+        curve: Curves.ease,
+      );
+      return;
+    }
+
+    if (_rowIndex < _movieRows - 1) {
       // Calculate the Y-offset of the next row
       double nextRowOffset = currentRowIndex * (ThemeStyles.height!);
 

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:domain/models/app_config.dart';
-import 'package:domain/models/enums.dart';
-import 'package:domain/models/transition_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
