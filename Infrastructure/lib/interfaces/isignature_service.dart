@@ -1,13 +1,7 @@
-import 'package:pointycastle/pointycastle.dart';
+import 'package:cryptography/cryptography.dart';
 
 abstract class ISignatureService {
-  Future<String> signAndVerifyMessage(
-    RSAPrivateKey privateKey,
-    RSAPublicKey publicKey,
-  );
-  Future<(RSAPrivateKey publicKey, RSAPublicKey privateKey)>
-      generateRsaPrivateKey();
-  RSASignature signMessage(RSAPrivateKey privateKey, String message);
-  bool verifySignature(
-      RSAPublicKey publicKey, String message, RSASignature signature);
+  Future<SimpleKeyPair> generateRsaPrivateKey();
+  Future<Signature> signMessage(KeyPair keyPair, String message);
+  Future<bool> verifySignature(List<int> message, Signature signature);
 }
