@@ -60,8 +60,7 @@ class TvShowGridViewModel extends PageViewModel {
         _movieRows++;
       }
     }).toList();
-    _node.requestFocus();
-
+    observer.subscribe("Return_Action_Pressed", onBackRequested);
     notifyListeners();
   }
 
@@ -94,7 +93,11 @@ class TvShowGridViewModel extends PageViewModel {
     }
 
     if (value.logicalKey.keyLabel == "Go Back") {
-      router.backToPrevious(pageContext);
+      router.changePage(
+        "/dashboard",
+        pageContext,
+        TransitionData(next: PageTransition.easeInAndOut),
+      );
     }
   }
 
@@ -186,5 +189,13 @@ class TvShowGridViewModel extends PageViewModel {
         curve: Curves.ease,
       );
     }
+  }
+
+  onBackRequested() {
+    router.changePage(
+      "/dashboard",
+      pageContext,
+      TransitionData(next: PageTransition.easeInAndOut),
+    );
   }
 }

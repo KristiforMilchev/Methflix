@@ -57,6 +57,9 @@ class VideoStreamViewModel extends PageViewModel {
     );
     await _videoPlayerController?.setVolume(100);
     await _videoPlayerController?.play();
+
+    observer.subscribe("Return_Action_Pressed", onBackRequested);
+
     notifyListeners();
   }
 
@@ -67,6 +70,11 @@ class VideoStreamViewModel extends PageViewModel {
       await _videoPlayerController?.pause();
       router.backToPrevious(pageContext);
     }
+  }
+
+  onBackRequested() async {
+    await _videoPlayerController?.pause();
+    router.backToPrevious(pageContext);
   }
 
   @override

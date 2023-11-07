@@ -48,11 +48,8 @@ class DashboardViewModel extends PageViewModel {
       _node.requestFocus();
       _videoStreamService = getIt.get<IVideoStreamService>();
       _signatureService = getIt.get<ISignatureService>();
-      var rsaData = await _signatureService.generateRsaPrivateKey();
-      var signature = await _signatureService.signAndVerifyMessage(
-        rsaData.$1,
-        rsaData.$2,
-      );
+      // var ed25519 = await _signatureService.generateRsaPrivateKey();
+      // var signature = await _signatureService.signMessage(ed25519, "Test");
 
       _movieLists = await _videoStreamService.getAllCategories();
 

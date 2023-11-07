@@ -19,6 +19,7 @@ class TvShowGrid extends StatelessWidget {
         child: SingleChildScrollView(
           controller: viewModel.scrollController,
           child: RawKeyboardListener(
+            autofocus: true,
             focusNode: viewModel.focusNode,
             onKey: (value) => viewModel.onRowChanged(value),
             child: Column(

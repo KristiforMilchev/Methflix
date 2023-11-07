@@ -1,7 +1,9 @@
 import 'package:domain/models/enums.dart';
 import 'package:domain/models/transition_data.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:presentation/views/dashboard/dashboard_view.dart';
 import 'package:presentation/views/tv_show_grid/tv_show_grid.dart';
 import 'package:presentation/views/video_stream/video_stream_view.dart';
@@ -92,6 +94,9 @@ class ApplicationRouter {
                   transitionDuration: e.$4,
                   child: WillPopScope(
                     onWillPop: () async {
+                      GetIt.I
+                          .get<IObserver>()
+                          .getObserver("Return_Action_Pressed", null);
                       return false;
                     },
                     child: e.$2,
