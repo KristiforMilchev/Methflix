@@ -55,6 +55,7 @@ dependencies:
   path_provider: ^2.0.1
   flutter_vlc_player: ^7.4.0
   show_fps: ^1.0.6
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
