@@ -26,10 +26,11 @@ class VideoStreamService implements IVideoStreamService {
       }, {}),
     );
 
-    if (result == null) throw Exception("Can't get API data");
+    if (result == null || result.statusCode != 200)
+      throw Exception("Can't get API data");
 
     List<Category> categories = [];
-    var data = jsonDecode(result);
+    var data = jsonDecode(result.body);
     for (var categoryMap in data) {
       var current = Category.fromJson(categoryMap);
       categories.add(current);
@@ -51,9 +52,9 @@ class VideoStreamService implements IVideoStreamService {
         }, {}),
       );
 
-      if (result == null) return null;
+      if (result == null || result.statusCode != 200) return null;
 
-      var data = jsonDecode(result);
+      var data = jsonDecode(result.body);
 
       var current = Movie.fromJson(data);
 
@@ -77,9 +78,9 @@ class VideoStreamService implements IVideoStreamService {
         }, {}),
       );
 
-      if (result == null) return null;
+      if (result == null || result.statusCode != 200) return null;
 
-      var data = jsonDecode(result);
+      var data = jsonDecode(result.body);
 
       var current = TvShowSeason.fromJson(data);
 

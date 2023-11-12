@@ -9,12 +9,12 @@ import 'package:http/http.dart' as http;
 
 import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 
-class HttpProvider implements IHttpProviderService {
+class HttpProvider<T> implements IHttpProviderService {
   String? sessionToken;
   List<int> cIds = [];
 
   @override
-  Future<String?> getRequest(
+  Future<http.Response?> getRequest(
     HttpRequest request, {
     bool isAuthenticated = false,
     String tokenType = "auth-token",
@@ -30,21 +30,14 @@ class HttpProvider implements IHttpProviderService {
         prefix,
       );
 
-      final response =
-          await http.get(Uri.parse(request.url), headers: request.headers);
-
-      if (response.statusCode == 200) {
-        return response.body;
-      }
-
-      return null;
+      return await http.get(Uri.parse(request.url), headers: request.headers);
     } catch (e) {
       return null;
     }
   }
 
   @override
-  Future<String?> postRequest(
+  Future<http.Response?> postRequest(
     HttpRequest request, {
     bool isAuthenticated = false,
     String tokenType = "auth-token",
@@ -61,24 +54,18 @@ class HttpProvider implements IHttpProviderService {
         prefix,
       );
 
-      var result = await http.post(
+      return await http.post(
         Uri.parse(request.url),
         headers: request.headers,
         body: request.params != null ? jsonEncode(request.params) : null,
       );
-
-      if (result.statusCode == 200) {
-        return result.body;
-      }
-
-      return null;
     } catch (ex) {
       return null;
     }
   }
 
   @override
-  Future<String?> putReqest(
+  Future<http.Response?> putReqest(
     HttpRequest request, {
     bool isAuthenticated = false,
     String tokenType = "auth-token",
@@ -94,17 +81,11 @@ class HttpProvider implements IHttpProviderService {
         prefix,
       );
 
-      var result = await http.put(
+      return await http.put(
         Uri.parse(request.url),
         headers: request.headers,
         body: jsonEncode(request.params),
       );
-
-      if (result.statusCode == 200) {
-        return result.body;
-      }
-
-      return null;
     } catch (e) {
       return null;
     }

@@ -16,6 +16,8 @@ dependencies:
   shared_preferences: ^2.0.20
   web_socket_channel: ^2.1.0
   cryptography: ^2.7.0
+  http: ^1.1.0
+
 
 dev_dependencies:
   flutter_test:

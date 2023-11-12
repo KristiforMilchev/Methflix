@@ -1,14 +1,13 @@
-// ignore_for_file: avoid_shadowing_type_parameters
-
 import 'package:domain/models/http_request.dart';
+import 'package:http/http.dart';
 
 abstract class IHttpProviderService {
   void setToken(String token, dynamic value);
 
-  Future<String?> getRequest(HttpRequest request,
+  Future<Response?> getRequest(HttpRequest request,
       {bool isAuthenticated = false});
-  Future<String?> postRequest(HttpRequest request,
+  Future<Response?> postRequest(HttpRequest request,
       {bool isAuthenticated = false});
-  Future<String?> putReqest(HttpRequest request,
+  Future<Response?> putReqest(HttpRequest request,
       {bool isAuthenticated = false});
 }
