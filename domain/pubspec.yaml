@@ -19,6 +19,7 @@ dependencies:
       url: "https://github.com/KristiforMilchev/stacked"
       ref: "master"
   web_socket_channel: ^2.1.0
+  cryptography: ^2.7.0
 
 dev_dependencies:
   flutter_test:

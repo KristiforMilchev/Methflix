@@ -56,7 +56,10 @@ class HttpProvider<T> implements IHttpProviderService {
 
       return await http.post(
         Uri.parse(request.url),
-        headers: request.headers,
+        headers: {
+          ...request.headers,
+          'Content-Type': 'application/json', // Set the Content-Type header
+        },
         body: request.params != null ? jsonEncode(request.params) : null,
       );
     } catch (ex) {
