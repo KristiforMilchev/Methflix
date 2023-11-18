@@ -5,6 +5,7 @@ import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:infrastructure/interfaces/ilocal_storage.dart';
 import 'package:infrastructure/interfaces/isignature_service.dart';
 import 'package:domain/models/http_request.dart';
+import 'package:domain/models/ed25519_key_pair.dart';
 
 class AuthenticationService implements IAuthenticationService {
   IlocalStorage storage;
@@ -21,12 +22,40 @@ class AuthenticationService implements IAuthenticationService {
     var servers = await getAuthenticatedServers();
     if (servers.any((element) => element.url == server.url)) return false;
 
-    var start = throw UnimplementedError();
+    var startRequest = await httpProviderService.getRequest(
+        HttpRequest("${server.url}/API/V1/Authentication/Init", {}, {}));
+    if (startRequest == null || startRequest.statusCode != 200) return false;
+
+    var message = startRequest.body;
+    var kp = await signatureService.generateRsaPrivateKey();
+    var edKey = Ed25519KeyPair(kp);
+    var key = await edKey.keyPair.extractPublicKey();
+
+    var signed = await signatureService.signMessage(kp, message);
+
+    var kpjson = jsonEncode(await edKey.toJson());
+    await storage.set("kp-${server.url}", kpjson);
+
+    var procesed = await httpProviderService.postRequest(
+      HttpRequest(
+        "${server.url}/API/V1/Authentication/Verify",
+        {},
+        {
+          "PublicKey": base64Encode(key.bytes),
+          "Signature": base64Encode(signed.bytes)
+        },
+      ),
+    );
+
+    if (procesed == null || procesed.statusCode != 200) return false;
+
+    return true;
   }
 
   @override
   Future<List<AuthenticatedServer>> getAuthenticatedServers() async {
-    var servers = await storage.get("Servers") as String;
+    var servers = await storage.get("Servers") as String?;
+    if (servers == null) return [];
     Map serverMap = jsonDecode(servers);
     List<AuthenticatedServer> result = [];
     serverMap.forEach((key, value) {
@@ -39,7 +68,9 @@ class AuthenticationService implements IAuthenticationService {
 
   @override
   Future<bool> isAuthenticated() async {
-    var servers = await storage.get("Servers") as String;
+    var servers = await storage.get("Servers") as String?;
+    if (servers == null) return false;
+
     Map serverMap = jsonDecode(servers);
     var isAuthenticated = false;
     serverMap.forEach((key, value) async {

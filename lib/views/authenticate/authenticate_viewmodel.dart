@@ -1,6 +1,8 @@
 import 'package:domain/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:infrastructure/interfaces/iauthentication_service.dart';
+import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:presentation/page_view_model.dart';
 import 'package:domain/models/authenticated_server.dart';
 
@@ -27,8 +29,32 @@ class AuthenticateViewModel extends PageViewModel {
     ),
   ];
   List<AuthenticatedServer> get servers => _servers;
+  late IAuthenticationService _authenticationService;
 
   AuthenticateViewModel(super.context);
+
+  ready() async {
+    _authenticationService = getIt<IAuthenticationService>();
+
+    await _authenticationService.authenticate(
+      AuthenticatedServer(
+        url: "http://192.168.1.105:5000",
+        lastResponse: DateTime.now(),
+        isOnline: true,
+      ),
+    );
+
+    for (var i = 0; i < 20; i++) {
+      _servers.add(
+        AuthenticatedServer(
+          url: "192.168.0.10$i",
+          lastResponse: DateTime.now(),
+          isOnline: false,
+        ),
+      );
+    }
+    notifyListeners();
+  }
 
   void onKeyPressed(RawKeyEvent value) {
     if (value is RawKeyDownEvent) return;
@@ -58,19 +84,6 @@ class AuthenticateViewModel extends PageViewModel {
       duration: Duration(milliseconds: 600), // Animation duration
       curve: Curves.easeInOut, // Animation curve
     );
-    notifyListeners();
-  }
-
-  ready() {
-    for (var i = 0; i < 20; i++) {
-      _servers.add(
-        AuthenticatedServer(
-          url: "192.168.0.10$i",
-          lastResponse: DateTime.now(),
-          isOnline: false,
-        ),
-      );
-    }
     notifyListeners();
   }
 }
