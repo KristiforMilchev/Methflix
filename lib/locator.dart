@@ -1,3 +1,4 @@
+import 'package:application/implementations/authentication_service.dart';
 import 'package:application/implementations/configuration.dart';
 import 'package:application/implementations/exception_manager.dart';
 import 'package:application/implementations/http_provider.dart';
@@ -8,6 +9,8 @@ import 'package:application/implementations/signature_service.dart';
 import 'package:application/implementations/video_stream_service.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart';
+import 'package:infrastructure/interfaces/iauthentication_service.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
 import 'package:infrastructure/interfaces/iexception_manager.dart';
 import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
@@ -19,21 +22,30 @@ import 'package:infrastructure/interfaces/ivideo_stream_service.dart';
 
 GetIt getIt = GetIt.I;
 void registerDependency() async {
-  Observer observer = Observer();
-  LocalStorage localStorage = LocalStorage();
-  IHttpProviderService httpService = HttpProvider();
-  getIt.registerSingleton<IHttpProviderService>(httpService);
+  getIt.registerSingleton<IHttpProviderService>(HttpProvider());
 
   getIt.registerSingleton<IExceptionManager>(ExceptionManager());
-  getIt.registerSingleton<IPageRouterService>(PageRouterService(observer));
-  getIt.registerSingleton<IObserver>(observer);
-  getIt.registerSingleton<IlocalStorage>(localStorage);
+  getIt.registerSingleton<IObserver>(Observer());
+  getIt.registerLazySingleton<IPageRouterService>(() {
+    IObserver observer = getIt<IObserver>();
+    return PageRouterService(observer);
+  });
+  getIt.registerSingleton<IlocalStorage>(LocalStorage());
   getIt.registerSingleton<ISignatureService>(SignatureService());
+
+  getIt.registerLazySingleton<IAuthenticationService>(() {
+    IHttpProviderService httpProvider = getIt<IHttpProviderService>();
+    ISignatureService signatureService = getIt<ISignatureService>();
+    IlocalStorage localStorage = getIt<IlocalStorage>();
+    return AuthenticationService(signatureService, httpProvider, localStorage);
+  });
 
   var configData = Configuration();
   var config = await configData.getConfig();
-  getIt.registerSingleton<IVideoStreamService>(
-      VideoStreamService(httpService, config.apiEndpoint));
+  getIt.registerLazySingleton<IVideoStreamService>(() {
+    IHttpProviderService httpService = getIt<IHttpProviderService>();
+    return VideoStreamService(httpService, config.apiEndpoint);
+  });
   getIt.registerSingleton<IConfiguration>(configData);
 }
 

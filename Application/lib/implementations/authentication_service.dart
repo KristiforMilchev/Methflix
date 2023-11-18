@@ -4,29 +4,29 @@ import 'package:infrastructure/interfaces/iauthentication_service.dart';
 import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:infrastructure/interfaces/ilocal_storage.dart';
 import 'package:infrastructure/interfaces/isignature_service.dart';
-import 'package:get_it/get_it.dart';
 import 'package:domain/models/http_request.dart';
 
 class AuthenticationService implements IAuthenticationService {
-  GetIt getIt = GetIt.I;
-  late IlocalStorage _storage;
-  late ISignatureService _signatureService;
-  late IHttpProviderService _httpProviderService;
+  IlocalStorage storage;
+  ISignatureService signatureService;
+  IHttpProviderService httpProviderService;
 
-  AuthenticationService() {
-    _storage = getIt.get<IlocalStorage>();
-    _signatureService = getIt.get<ISignatureService>();
-    _httpProviderService = getIt.get<IHttpProviderService>();
-  }
-
+  AuthenticationService(
+    this.signatureService,
+    this.httpProviderService,
+    this.storage,
+  );
   @override
-  Future<bool> authenticate(AuthenticatedServer server) {
-    throw UnimplementedError();
+  Future<bool> authenticate(AuthenticatedServer server) async {
+    var servers = await getAuthenticatedServers();
+    if (servers.any((element) => element.url == server.url)) return false;
+
+    var start = throw UnimplementedError();
   }
 
   @override
   Future<List<AuthenticatedServer>> getAuthenticatedServers() async {
-    var servers = await _storage.get("Servers") as String;
+    var servers = await storage.get("Servers") as String;
     Map serverMap = jsonDecode(servers);
     List<AuthenticatedServer> result = [];
     serverMap.forEach((key, value) {
@@ -39,12 +39,12 @@ class AuthenticationService implements IAuthenticationService {
 
   @override
   Future<bool> isAuthenticated() async {
-    var servers = await _storage.get("Servers") as String;
+    var servers = await storage.get("Servers") as String;
     Map serverMap = jsonDecode(servers);
     var isAuthenticated = false;
     serverMap.forEach((key, value) async {
       var current = AuthenticatedServer.fromJson(value);
-      var result = await _httpProviderService.getRequest(
+      var result = await httpProviderService.getRequest(
         HttpRequest(
           "${current.url}/system/status",
           {},
@@ -62,7 +62,7 @@ class AuthenticationService implements IAuthenticationService {
 
   @override
   Future<bool> logOut(AuthenticatedServer server) async {
-    var response = await _httpProviderService.postRequest(
+    var response = await httpProviderService.postRequest(
       HttpRequest(
         "${server.url}/authenticate/logout",
         {"Authorize": "Bearer: ${server.bearer}"},
