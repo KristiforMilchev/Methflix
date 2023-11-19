@@ -5,9 +5,9 @@ class LocalStorage implements IlocalStorage {
   SharedPreferences? _prefs;
 
   LocalStorage() {
-    Future.delayed(Duration(milliseconds: 500), () async {
-      _prefs = await getSharedPreferences();
-    });
+    SharedPreferences.getInstance().then(
+      (value) => _prefs = value,
+    );
   }
 
   @override
