@@ -16,18 +16,7 @@ class AuthenticateViewModel extends PageViewModel {
   ScrollController _scrollController = ScrollController();
   ScrollController get controller => _scrollController;
 
-  List<AuthenticatedServer> _servers = [
-    AuthenticatedServer(
-      url: "192.168.0.106",
-      lastResponse: DateTime.now(),
-      isOnline: true,
-    ),
-    AuthenticatedServer(
-      url: "192.168.0.106",
-      lastResponse: DateTime.now(),
-      isOnline: false,
-    ),
-  ];
+  List<AuthenticatedServer> _servers = [];
   List<AuthenticatedServer> get servers => _servers;
   late IAuthenticationService _authenticationService;
 
@@ -35,7 +24,7 @@ class AuthenticateViewModel extends PageViewModel {
 
   ready() async {
     _authenticationService = getIt<IAuthenticationService>();
-
+    _servers = await _authenticationService.getAuthenticatedServers();
     await _authenticationService.authenticate(
       AuthenticatedServer(
         url: "http://192.168.1.105:5000",
@@ -44,15 +33,6 @@ class AuthenticateViewModel extends PageViewModel {
       ),
     );
 
-    for (var i = 0; i < 20; i++) {
-      _servers.add(
-        AuthenticatedServer(
-          url: "192.168.0.10$i",
-          lastResponse: DateTime.now(),
-          isOnline: false,
-        ),
-      );
-    }
     notifyListeners();
   }
 

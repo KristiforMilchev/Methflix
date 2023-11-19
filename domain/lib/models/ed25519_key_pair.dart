@@ -8,10 +8,10 @@ class Ed25519KeyPair {
   Ed25519KeyPair(this.keyPair);
 
   Future<Map<String, dynamic>> toJson() async {
-    var privateKey = await keyPair.extractPublicKey();
+    var privateKey = await keyPair.extractPrivateKeyBytes();
     var publicKey = await keyPair.extractPublicKey();
     return {
-      'privateKey': base64Encode(privateKey.bytes),
+      'privateKey': base64Encode(privateKey),
       'publicKey': base64Encode(publicKey.bytes),
     };
   }
